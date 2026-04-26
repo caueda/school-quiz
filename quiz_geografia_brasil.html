@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Divertido de Geografia do Brasil</title>
+  <style>
+    :root{
+      --green:#2e9d59; --yellow:#ffd34d; --blue:#3b82f6; --red:#ef4444; --ink:#1f2937; --card:#ffffff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, Helvetica, sans-serif;background:linear-gradient(135deg,#dff7e8,#fff7ca,#dbeafe);color:var(--ink);min-height:100vh;}
+    .wrap{max-width:980px;margin:0 auto;padding:20px;}
+    header{background:var(--card);border:4px solid #fff;border-radius:26px;padding:18px 20px;box-shadow:0 10px 25px rgba(0,0,0,.12);text-align:center;}
+    h1{margin:0;font-size:clamp(26px,5vw,46px);color:#137a39}.subtitle{font-size:18px;margin-top:8px}.emoji{font-size:34px}
+    .panel{margin-top:18px;background:rgba(255,255,255,.9);border-radius:26px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.12)}
+    .topbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}.pill{background:#fff;border:2px solid #e5e7eb;border-radius:999px;padding:10px 14px;font-weight:bold}.score{color:#0f766e}.progress{height:18px;background:#e5e7eb;border-radius:999px;overflow:hidden;flex:1;min-width:180px}.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--yellow));transition:.4s}
+    .character{font-size:52px;text-align:center;margin:10px 0}.question{font-size:25px;font-weight:bold;line-height:1.25;background:#f8fafc;border-left:8px solid var(--blue);padding:18px;border-radius:18px;margin:14px 0}.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:650px){.options{grid-template-columns:1fr}.question{font-size:21px}}
+    button.option{border:0;border-radius:18px;background:#fff;padding:16px;font-size:18px;font-weight:bold;text-align:left;cursor:pointer;box-shadow:0 4px 0 #cbd5e1;transition:.12s}button.option:hover{transform:translateY(-2px);box-shadow:0 6px 0 #cbd5e1}button.option.correct{background:#dcfce7;border:3px solid #22c55e}button.option.wrong{background:#fee2e2;border:3px solid #ef4444}button.option:disabled{cursor:not-allowed;opacity:.95}
+    .feedback{display:none;margin-top:16px;padding:16px;border-radius:18px;font-size:18px;line-height:1.45}.feedback.ok{display:block;background:#dcfce7;border:3px solid #22c55e}.feedback.no{display:block;background:#fff1c2;border:3px solid #f59e0b}.next{display:none;margin:18px auto 0;border:0;border-radius:999px;background:#2563eb;color:white;padding:14px 24px;font-size:18px;font-weight:bold;cursor:pointer;box-shadow:0 5px 0 #1e40af}.next.show{display:block}.start,.restart{border:0;border-radius:999px;background:#16a34a;color:white;padding:14px 24px;font-size:19px;font-weight:bold;cursor:pointer;box-shadow:0 5px 0 #166534;margin-top:12px}.hidden{display:none}.final{text-align:center}.badges{font-size:34px;line-height:1.6}.tip{background:#eff6ff;border:2px dashed #60a5fa;border-radius:18px;padding:12px;margin-top:12px}.small{font-size:14px;color:#475569}.map{font-size:38px}.shake{animation:shake .28s}@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="emoji">🇧🇷 🧭 🌳</div>
+      <h1>Missão Geografia do Brasil</h1>
+      <div class="subtitle">Um quiz divertido para revisar país, regiões, poderes, município, recursos naturais e consumo consciente.</div>
+    </header>
+
+    <section id="intro" class="panel final">
+      <div class="character">🦜</div>
+      <h2>Olá, explorador(a)!</h2>
+      <p>Você vai responder perguntas como se estivesse viajando pelo Brasil. Quando errar, o quiz explica a resposta certa na hora.</p>
+      <p class="tip"><strong>Dica:</strong> leia com calma. Algumas perguntas têm pegadinhas de prova!</p>
+      <button class="start" onclick="startQuiz()">Começar aventura!</button>
+    </section>
+
+    <section id="quiz" class="panel hidden">
+      <div class="topbar">
+        <div class="pill">Pergunta <span id="num">1</span>/<span id="total">0</span></div>
+        <div class="progress"><div id="bar" class="bar"></div></div>
+        <div class="pill score">⭐ Pontos: <span id="score">0</span></div>
+      </div>
+      <div id="character" class="character">🧭</div>
+      <div id="question" class="question"></div>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next" onclick="nextQuestion()">Próxima missão ➜</button>
+    </section>
+
+    <section id="result" class="panel final hidden">
+      <div class="character">🏆</div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <div id="badges" class="badges"></div>
+      <button class="restart" onclick="restartQuiz()">Jogar novamente</button>
+    </section>
+  </div>
+
+<script>
+const questions = [
+  {c:'🇧🇷', q:'Qual é a capital do Brasil?', o:['São Paulo','Rio de Janeiro','Brasília','Salvador'], a:2, e:'A capital do Brasil é Brasília. Ela fica no Centro-Oeste, no Distrito Federal.'},
+  {c:'🗺️', q:'O Brasil é formado por:', o:['País, estados, municípios e produtos que consumimos','Apenas cidades','Apenas estados','Apenas bairros'], a:0, e:'Na prova, lembre: estudamos o país, os estados, os municípios e também os produtos que consumimos.'},
+  {c:'⚖️', q:'Quais são os três poderes?', o:['Prefeito, vereador e escola','Executivo, Legislativo e Judiciário','Norte, Sul e Sudeste','Renováveis, não renováveis e matéria-prima'], a:1, e:'Os três poderes são Executivo, Legislativo e Judiciário.'},
+  {c:'👩‍⚖️', q:'Qual poder julga se as leis estão sendo cumpridas?', o:['Executivo','Legislativo','Judiciário','Recursos naturais'], a:2, e:'O Judiciário julga e garante o cumprimento das leis. Exemplos: juiz e tribunal.'},
+  {c:'🏛️', q:'Quem cria e vota leis?', o:['Legislativo','Executivo','Judiciário','Consumidor'], a:0, e:'O Legislativo cria e vota leis. Exemplos: vereadores, deputados e senadores.'},
+  {c:'👔', q:'No município, quem administra a cidade?', o:['Vereadores','Prefeito','Juiz','Governador de outro país'], a:1, e:'O prefeito administra a cidade. Ele faz parte do Poder Executivo municipal.'},
+  {c:'🏙️', q:'No município, qual é uma função dos vereadores?', o:['Cuidar da Câmara Municipal e fazer leis municipais','Julgar crimes','Ser presidente do país','Produzir trigo'], a:0, e:'Os vereadores representam a população e ajudam a criar leis na Câmara Municipal.'},
+  {c:'🌎', q:'Qual região do Brasil tem a Floresta Amazônica e muitos rios?', o:['Sul','Nordeste','Norte','Sudeste'], a:2, e:'A Região Norte tem a Floresta Amazônica, muitos rios e grande presença indígena.'},
+  {c:'🌵', q:'Qual região é conhecida pelo sertão e pela cultura forte?', o:['Nordeste','Centro-Oeste','Sul','Norte'], a:0, e:'O Nordeste tem sertão, litoral, turismo forte e uma cultura muito rica.'},
+  {c:'🏭', q:'Qual região é muito urbanizada, industrializada e tem grandes cidades?', o:['Sudeste','Norte','Centro-Oeste','Sul'], a:0, e:'O Sudeste é a região mais rica e industrializada, com grandes cidades como São Paulo e Rio de Janeiro.'},
+  {c:'🐄', q:'Qual região tem agropecuária forte, Pantanal e Brasília?', o:['Sul','Centro-Oeste','Nordeste','Norte'], a:1, e:'O Centro-Oeste tem agropecuária forte, o Pantanal e Brasília, a capital do país.'},
+  {c:'❄️', q:'Qual região tem clima mais frio e pode nevar?', o:['Sul','Norte','Nordeste','Centro-Oeste'], a:0, e:'O Sul tem clima mais frio, agricultura forte e pode nevar em alguns lugares.'},
+  {c:'🌳', q:'Recursos naturais renováveis são aqueles que:', o:['Nunca acabam, mesmo usando sem cuidado','Podem se renovar com o tempo, se usados com cuidado','São sempre petróleo e carvão','Só existem nas cidades'], a:1, e:'Renováveis podem se renovar, mas precisam de cuidado. Exemplos: água, plantas, animais e solo.'},
+  {c:'🛢️', q:'Qual destes é um recurso natural NÃO renovável?', o:['Água','Plantas','Petróleo','Vento'], a:2, e:'Petróleo é não renovável. Outros exemplos: carvão, minerais e gás natural.'},
+  {c:'🍞', q:'O que é matéria-prima?', o:['O produto já pronto na loja','O material usado para fabricar produtos','Uma região do Brasil','Um tipo de prefeitura'], a:1, e:'Matéria-prima é o material usado para fabricar produtos. Exemplo: trigo vira pão.'},
+  {c:'👕', q:'Para uma roupa existir, ela precisa principalmente de:', o:['Algodão ou outro tecido como matéria-prima','Petróleo puro na mesa','Apenas água','Uma lei municipal'], a:0, e:'Roupas podem ser feitas de algodão, lã, poliéster e outros materiais. Tudo precisa ser produzido.'},
+  {c:'🛒', q:'Consumo consciente significa:', o:['Comprar tudo que quiser sem pensar','Usar recursos com responsabilidade e evitar desperdício','Jogar lixo na natureza','Nunca usar água'], a:1, e:'Consumo consciente é economizar água, reciclar, preservar a natureza e usar recursos com responsabilidade.'},
+  {c:'💧', q:'Qual atitude mostra consumo consciente?', o:['Deixar a torneira aberta','Jogar lixo no chão','Reciclar e economizar água','Desperdiçar comida'], a:2, e:'Reciclar e economizar água são atitudes de consumo consciente.'},
+  {c:'🧠', q:'Macete: quem administra a cidade?', o:['Prefeito','Vereadores','Região Sul','Petróleo'], a:0, e:'Macete: prefeitura lembra prefeito. O prefeito administra a cidade.'},
+  {c:'🧪', q:'Se a pergunta for “Quem cria leis municipais?”, a resposta é:', o:['Vereadores','Prefeito sozinho','Amazônia','Recursos naturais'], a:0, e:'Quem cria leis municipais são os vereadores, na Câmara Municipal.'}
+];
+let idx=0, score=0, answered=false;
+document.getElementById('total').textContent = questions.length;
+function startQuiz(){document.getElementById('intro').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');showQuestion();}
+function showQuestion(){answered=false; const q=questions[idx]; document.getElementById('num').textContent=idx+1; document.getElementById('bar').style.width=((idx)/questions.length*100)+'%'; document.getElementById('character').textContent=q.c; document.getElementById('question').textContent=q.q; const opts=document.getElementById('options'); opts.innerHTML=''; document.getElementById('feedback').className='feedback'; document.getElementById('feedback').innerHTML=''; document.getElementById('next').classList.remove('show'); q.o.forEach((text,i)=>{const b=document.createElement('button'); b.className='option'; b.textContent=['A) ','B) ','C) ','D) '][i]+text; b.onclick=()=>answer(i,b); opts.appendChild(b);});}
+function answer(i,btn){if(answered)return; answered=true; const q=questions[idx]; const buttons=[...document.querySelectorAll('button.option')]; buttons.forEach(b=>b.disabled=true); const fb=document.getElementById('feedback'); if(i===q.a){score++; document.getElementById('score').textContent=score; btn.classList.add('correct'); fb.className='feedback ok'; fb.innerHTML='🎉 <strong>Acertou!</strong><br>'+q.e;} else {btn.classList.add('wrong','shake'); buttons[q.a].classList.add('correct'); fb.className='feedback no'; fb.innerHTML='💡 <strong>Quase!</strong> A resposta correta é: <strong>'+q.o[q.a]+'</strong>.<br>'+q.e;} document.getElementById('next').classList.add('show'); document.getElementById('bar').style.width=((idx+1)/questions.length*100)+'%';}
+function nextQuestion(){idx++; if(idx<questions.length){showQuestion();} else {finish();}}
+function finish(){document.getElementById('quiz').classList.add('hidden'); document.getElementById('result').classList.remove('hidden'); const pct=Math.round(score/questions.length*100); let title, text, badges; if(pct>=90){title='Excelente, mestre da Geografia!'; text='Você mandou muito bem! Já pode explicar o Brasil para a turma.'; badges='🇧🇷 🏆 ⭐⭐⭐';} else if(pct>=70){title='Muito bem, explorador(a)!'; text='Você está quase lá. Revise as explicações das perguntas que errou.'; badges='🧭 ⭐⭐';} else {title='Boa tentativa! Vamos treinar mais um pouco?'; text='Errar faz parte da aventura. Jogue novamente e leia as dicas com atenção.'; badges='🌱 ⭐';} document.getElementById('resultTitle').textContent=title; document.getElementById('resultText').textContent=`Você fez ${score} de ${questions.length} pontos (${pct}%). ${text}`; document.getElementById('badges').textContent=badges;}
+function restartQuiz(){idx=0;score=0;document.getElementById('score').textContent=0;document.getElementById('result').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');showQuestion();}
+</script>
+</body>
+</html>
