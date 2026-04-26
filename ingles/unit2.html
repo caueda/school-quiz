@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz Inglês - Explore Our Town!</title>
+<style>
+:root{--blue:#2f80ed;--green:#27ae60;--orange:#f2994a;--red:#eb5757;--purple:#9b51e0;--bg:#f7fbff;--card:#fff;--text:#263238}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#e3f2fd,#fff8e1);color:var(--text)}
+header{background:linear-gradient(90deg,var(--blue),#56ccf2);color:white;padding:24px 16px;text-align:center;border-bottom:6px solid #f2c94c}
+h1{margin:0;font-size:2rem}.subtitle{font-size:1.05rem;margin-top:8px}.wrap{max-width:980px;margin:0 auto;padding:18px}
+.card{background:var(--card);border-radius:22px;padding:20px;margin:18px 0;box-shadow:0 8px 22px rgba(0,0,0,.1);border:2px solid rgba(47,128,237,.15)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.pill{display:inline-block;padding:8px 12px;border-radius:999px;background:#eaf4ff;margin:4px;font-weight:bold}
+.btn{border:0;border-radius:16px;padding:14px 16px;margin:8px 6px;background:#eef6ff;color:#123;cursor:pointer;font-size:1rem;font-weight:bold;box-shadow:0 3px 0 #bdd7f0;transition:.15s;text-align:left}
+.btn:hover{transform:translateY(-2px)}.btn.correct{background:#d9f8e5;box-shadow:0 3px 0 #8bd3a8}.btn.wrong{background:#ffe0df;box-shadow:0 3px 0 #f29b9b}.options{display:grid;gap:8px;margin-top:12px}
+.feedback{padding:12px;border-radius:14px;margin-top:12px;font-weight:bold;display:none}.ok{background:#dff8e8;color:#145a32}.bad{background:#ffe6e6;color:#7b1e1e}.note{background:#fff4d6;border-left:8px solid var(--orange);padding:12px;border-radius:12px}
+.score{font-size:1.2rem;font-weight:bold}.small{font-size:.92rem;color:#546e7a}.emoji{font-size:2rem}.hidden{display:none}.progress{height:18px;background:#e0e0e0;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#27ae60,#f2c94c);transition:.3s}.question-title{font-size:1.2rem;font-weight:bold}.center{text-align:center}.tabs button{background:#fff;border:2px solid #90caf9;border-radius:999px;padding:10px 14px;margin:5px;font-weight:bold;cursor:pointer}.tabs button.active{background:#2f80ed;color:#fff}.mini{font-size:.9rem}.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.select{padding:10px;border-radius:10px;border:2px solid #90caf9;font-size:1rem;width:100%} input{padding:12px;border-radius:12px;border:2px solid #90caf9;font-size:1rem;width:100%}.badge{font-size:3rem}.footer{padding:25px;text-align:center;color:#607d8b}
+</style>
+</head>
+<body>
+<header>
+  <div class="emoji">🏙️🚌🍿</div>
+  <h1>Explore Our Town!</h1>
+  <div class="subtitle">Quiz interativo de inglês para crianças de 9 anos</div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <h2>📚 Material de estudo rápido</h2>
+    <p>Antes do quiz, revise estas palavras e frases. Leia em voz alta!</p>
+    <div class="row">
+      <div><h3>Places in town</h3><span class="pill">grocery store</span><span class="pill">sports center</span><span class="pill">drugstore</span><span class="pill">hospital</span><span class="pill">police station</span><span class="pill">town square</span><span class="pill">cafe</span><span class="pill">bus stop</span><span class="pill">movie theater</span><span class="pill">store</span></div>
+      <div><h3>Jobs</h3><span class="pill">doctor</span><span class="pill">sales clerk</span><span class="pill">librarian</span><span class="pill">bus driver</span><span class="pill">server</span><span class="pill">police officer</span></div>
+      <div><h3>Useful sentences</h3><p>✅ There is a cafe.</p><p>✅ There are some stores.</p><p>❌ There isn't a movie theater.</p><p>❌ There aren't any schools.</p><p>❓ Is there a drugstore?</p><p>❓ Are there any police officers?</p></div>
+    </div>
+    <div class="note"><b>Dica:</b> usamos <b>There is</b> para 1 coisa/pessoa e <b>There are</b> para 2 ou mais. Em perguntas: <b>Is there...?</b> e <b>Are there any...?</b></div>
+  </div>
+
+  <div class="card center">
+    <h2>🎮 Escolha o modo</h2>
+    <div class="tabs">
+      <button onclick="showSection('quiz')" class="active" id="tabQuiz">Quiz</button>
+      <button onclick="showSection('game')" id="tabGame">Joguinho</button>
+      <button onclick="showSection('writing')" id="tabWriting">Treino de frases</button>
+    </div>
+  </div>
+
+  <section id="quiz" class="card">
+    <h2>⭐ Quiz principal</h2>
+    <div class="score">Pontuação: <span id="score">0</span> / <span id="total"></span></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div id="questionBox"></div>
+    <div class="center"><button class="btn" onclick="nextQuestion()">Próxima pergunta ➡️</button><button class="btn" onclick="restartQuiz()">Recomeçar 🔄</button></div>
+  </section>
+
+  <section id="game" class="card hidden">
+    <h2>🕵️ Missão: ajude as crianças na cidade!</h2>
+    <p>Escolha o lugar certo para cada situação.</p>
+    <div id="missionBox"></div>
+    <div class="center"><button class="btn" onclick="nextMission()">Nova missão 🎲</button></div>
+  </section>
+
+  <section id="writing" class="card hidden">
+    <h2>✍️ Treino de frases</h2>
+    <p>Complete as frases em inglês. Depois clique em verificar.</p>
+    <div class="row">
+      <div><label>1) Na minha cidade, há algumas lojas.</label><input id="w1" placeholder="In my town, ..." /></div>
+      <div><label>2) Não há hospitais.</label><input id="w2" placeholder="There ..." /></div>
+      <div><label>3) Onde você mora?</label><input id="w3" placeholder="Where ..." /></div>
+      <div><label>4) Eu moro na Park Street.</label><input id="w4" placeholder="I live ..." /></div>
+    </div>
+    <button class="btn" onclick="checkWriting()">Verificar respostas ✅</button>
+    <div id="writingFeedback" class="feedback"></div>
+  </section>
+
+  <div class="card">
+    <h2>🏆 Desafio oral</h2>
+    <p>Peça para a criança responder em voz alta:</p>
+    <p class="pill">What's in your town?</p><p class="pill">Is there a drugstore in your town?</p><p class="pill">Are there any bus stops?</p><p class="pill">Where do you live?</p>
+  </div>
+</div>
+<div class="footer">Feito para estudar inglês de forma leve, divertida e interativa 💙</div>
+<script>
+const questions=[
+{q:'What is “grocery store” in Portuguese?',o:['mercado / mercearia','delegacia','hospital','cinema'],a:0,e:'Grocery store é um lugar onde compramos comida e produtos do dia a dia.'},
+{q:'Choose the correct sentence:',o:['There are a cafe.','There is a cafe.','There is some stores.','There aren’t a hospital.'],a:1,e:'Cafe está no singular, então usamos: There is a cafe.'},
+{q:'Complete: There ___ some stores.',o:['is','are','isn’t','am'],a:1,e:'Stores está no plural. Por isso: There are some stores.'},
+{q:'Complete: There aren’t ___ schools.',o:['some','a','any','one'],a:2,e:'Em frases negativas no plural, usamos any: There aren’t any schools.'},
+{q:'Where do you go to watch a movie?',o:['hospital','movie theater','bus stop','drugstore'],a:1,e:'Movie theater é o cinema.'},
+{q:'Who drives the bus?',o:['doctor','server','bus driver','librarian'],a:2,e:'Bus driver é o motorista de ônibus.'},
+{q:'Who works in a library?',o:['librarian','doctor','sales clerk','police officer'],a:0,e:'Librarian trabalha na biblioteca.'},
+{q:'Choose the correct question:',o:['Is there a drugstore?','Are there a drugstore?','There is a drugstore?','Is there any drugstore?'],a:0,e:'Para singular usamos: Is there a...?'},
+{q:'Choose the correct answer: Are there any police officers?',o:['Yes, there is.','Yes, there are.','Yes, it is.','Yes, they is.'],a:1,e:'A pergunta usa Are there, então a resposta é: Yes, there are.'},
+{q:'Complete: I live ___ Green Street.',o:['in','on','at','by'],a:1,e:'Para nomes de rua em inglês, usamos geralmente on: I live on Green Street.'},
+{q:'What place helps sick people?',o:['hospital','cafe','town square','sports center'],a:0,e:'Hospital é o lugar para ajudar pessoas doentes.'},
+{q:'What can you do at a cafe?',o:['drink orange juice','drive a bus','read a police report','buy medicine only'],a:0,e:'No cafe, você pode tomar suco, café ou comer algo.'},
+{q:'Choose the negative sentence:',o:['There is a police station.','There are some stores.','There isn’t a movie theater.','Is there a cafe?'],a:2,e:'There isn’t... é uma frase negativa.'},
+{q:'What is “town square”?',o:['praça central da cidade','ponto de ônibus','farmácia','loja'],a:0,e:'Town square é a praça da cidade.'},
+{q:'Complete: ___ there any teachers?',o:['Is','Are','Do','Does'],a:1,e:'Teachers está no plural, então: Are there any teachers?'}
+];
+let current=0,score=0,answered=false;document.getElementById('total').textContent=questions.length;
+function renderQuestion(){answered=false;const item=questions[current];let html=`<p class="small">Pergunta ${current+1} de ${questions.length}</p><div class="question-title">${item.q}</div><div class="options">`;item.o.forEach((op,i)=>html+=`<button class="btn" onclick="answer(${i},this)">${op}</button>`);html+=`</div><div id="fb" class="feedback"></div>`;document.getElementById('questionBox').innerHTML=html;updateBar()}
+function answer(i,btn){if(answered)return;answered=true;const item=questions[current];const fb=document.getElementById('fb');const buttons=document.querySelectorAll('#questionBox .btn');buttons[item.a].classList.add('correct');if(i===item.a){score++;document.getElementById('score').textContent=score;fb.className='feedback ok';fb.innerHTML='🎉 Muito bem! '+item.e}else{btn.classList.add('wrong');fb.className='feedback bad';fb.innerHTML='💡 Quase! A resposta correta é: <b>'+item.o[item.a]+'</b>. '+item.e}fb.style.display='block'}
+function nextQuestion(){if(current<questions.length-1){current++;renderQuestion()}else{document.getElementById('questionBox').innerHTML=`<div class="center"><div class="badge">🏆</div><h2>Fim do quiz!</h2><p>Sua pontuação foi <b>${score}/${questions.length}</b>.</p><p>${score>=12?'Excelente! Você está pronto para a prova! 🌟':score>=8?'Muito bom! Revise as perguntas que errou e tente de novo. 💪':'Vamos praticar mais um pouco. Você consegue! 🚀'}</p></div>`;document.getElementById('bar').style.width='100%'}}
+function restartQuiz(){current=0;score=0;document.getElementById('score').textContent=0;renderQuestion()}
+function updateBar(){document.getElementById('bar').style.width=((current)/questions.length*100)+'%'}
+function showSection(id){['quiz','game','writing'].forEach(s=>document.getElementById(s).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.getElementById(id==='quiz'?'tabQuiz':id==='game'?'tabGame':'tabWriting').classList.add('active')}
+const missions=[
+{s:'Alicia is sick. Where should she go?',a:'hospital',ops:['hospital','movie theater','town square'],e:'Hospital ajuda pessoas doentes.'},
+{s:'Rafa wants to read and borrow books. Where should he go?',a:'library',ops:['library','bus stop','cafe'],e:'Library é biblioteca.'},
+{s:'Daniel wants to buy food. Where should he go?',a:'grocery store',ops:['police station','grocery store','sports center'],e:'Grocery store vende comida.'},
+{s:'The children need help from the police. Who can help?',a:'police officer',ops:['server','police officer','doctor'],e:'Police officer é policial.'},
+{s:'Lena wants to take the bus. Where should she wait?',a:'bus stop',ops:['bus stop','drugstore','store'],e:'Bus stop é ponto de ônibus.'}
+];let mi=0;
+function renderMission(){const m=missions[mi];let html=`<div class="question-title">${m.s}</div><div class="options">`;m.ops.forEach(op=>html+=`<button class="btn" onclick="checkMission('${op}',this)">${op}</button>`);html+=`</div><div id="mfb" class="feedback"></div>`;document.getElementById('missionBox').innerHTML=html}
+function checkMission(op,btn){const m=missions[mi],fb=document.getElementById('mfb');if(op===m.a){btn.classList.add('correct');fb.className='feedback ok';fb.innerHTML='✅ Correct! '+m.e}else{btn.classList.add('wrong');fb.className='feedback bad';fb.innerHTML='❌ Not this time. Correct answer: <b>'+m.a+'</b>. '+m.e}fb.style.display='block'}
+function nextMission(){mi=(mi+1)%missions.length;renderMission()}
+function norm(s){return s.toLowerCase().replace(/[.!?]/g,'').replace(/\s+/g,' ').trim()}
+function checkWriting(){const answers=[['in my town there are some stores','there are some stores in my town'],['there arent any hospitals','there are not any hospitals'],['where do you live'],['i live on park street']];const vals=[w1.value,w2.value,w3.value,w4.value].map(norm);let ok=0;let out='';vals.forEach((v,i)=>{if(answers[i].includes(v)){ok++;out+=`✅ ${i+1}) Correct!<br>`}else{out+=`💡 ${i+1}) Sugestão: <b>${answers[i][0]}</b><br>`}});const fb=document.getElementById('writingFeedback');fb.className=ok===4?'feedback ok':'feedback bad';fb.innerHTML=`Você acertou ${ok}/4.<br>`+out;fb.style.display='block'}
+renderQuestion();renderMission();
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz de Inglês - All About School</title>
+<style>
+:root{--blue:#3b82f6;--green:#22c55e;--orange:#f97316;--pink:#ec4899;--yellow:#facc15;--bg:#f0f9ff;--card:#ffffff;--text:#1f2937;--bad:#ef4444;--good:#16a34a;}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dbeafe,#fef3c7,#fce7f3);color:var(--text)}
+header{padding:24px 16px;text-align:center;background:linear-gradient(90deg,#2563eb,#22c55e);color:#fff;border-bottom:6px solid #facc15}h1{margin:0;font-size:clamp(28px,6vw,48px)}.subtitle{font-size:18px;margin-top:8px}.wrap{max-width:1080px;margin:0 auto;padding:18px}.tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0 20px}.tab{border:0;border-radius:999px;padding:12px 18px;font-weight:bold;font-size:16px;cursor:pointer;background:#fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}.tab.active{background:#111827;color:#fff}.section{display:none}.section.active{display:block}.card{background:rgba(255,255,255,.95);border-radius:22px;padding:20px;margin:16px 0;box-shadow:0 8px 24px rgba(0,0,0,.12);border:3px solid rgba(255,255,255,.8)}h2{margin-top:0;color:#1d4ed8}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.mini{padding:14px;border-radius:16px;background:#f8fafc;border:2px dashed #93c5fd}.word{font-size:22px;font-weight:bold;color:#0f766e}.pt{color:#6b7280}.pill{display:inline-block;background:#fef08a;border-radius:999px;padding:4px 10px;margin:3px;font-weight:bold}.dialog{background:#ecfeff;border-left:8px solid #06b6d4;padding:12px;border-radius:12px;margin:8px 0}.quizBox{text-align:center}.qnum{font-weight:bold;color:#6b7280}.question{font-size:24px;font-weight:bold;margin:18px 0}.answers{display:grid;gap:12px;max-width:650px;margin:0 auto}.answer{font-size:18px;padding:14px;border:3px solid #dbeafe;border-radius:16px;background:#fff;cursor:pointer;transition:.15s}.answer:hover{transform:scale(1.02);background:#eff6ff}.answer.correct{background:#dcfce7;border-color:#22c55e}.answer.wrong{background:#fee2e2;border-color:#ef4444}.feedback{min-height:72px;margin:16px auto;padding:14px;border-radius:16px;max-width:760px;font-size:18px}.feedback.good{background:#dcfce7;border:2px solid #22c55e}.feedback.bad{background:#fee2e2;border:2px solid #ef4444}.btn{border:0;border-radius:14px;background:#2563eb;color:white;padding:14px 20px;font-weight:bold;font-size:17px;cursor:pointer;box-shadow:0 5px 0 #1e40af;margin:6px}.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1e40af}.btn.orange{background:#f97316;box-shadow:0 5px 0 #c2410c}.score{font-size:22px;font-weight:bold}.progress{height:18px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:14px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#3b82f6);transition:.3s}.flash{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}.flip{height:120px;perspective:1000px;cursor:pointer}.inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}.flip.flipped .inner{transform:rotateY(180deg)}.front,.back{position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;border-radius:18px;font-size:20px;font-weight:bold;box-shadow:0 6px 14px rgba(0,0,0,.15)}.front{background:#fff7ed;border:3px solid #fb923c}.back{background:#ecfdf5;border:3px solid #22c55e;transform:rotateY(180deg)}.gameArea{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.drag,.drop{padding:12px 14px;border-radius:12px;font-weight:bold}.drag{background:#dbeafe;border:2px solid #60a5fa;cursor:grab}.drop{background:#fff;border:3px dashed #94a3b8;min-width:150px;min-height:54px}.drop.ok{background:#dcfce7;border-color:#22c55e}.drop.bad{background:#fee2e2;border-color:#ef4444}.footer{text-align:center;color:#64748b;padding:30px}.star{font-size:28px}.routine{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.routine div{background:#f0fdf4;border:2px solid #86efac;border-radius:14px;padding:12px}.bigEmoji{font-size:36px;display:block}.hidden{display:none}@media(max-width:600px){.question{font-size:20px}.answer{font-size:16px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header><h1>🎒 All About School!</h1><div class="subtitle">Quiz + material de estudo divertido para crianças de 9 anos</div></header>
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('study',this)">📚 Estudar</button>
+    <button class="tab" onclick="showTab('flashcards',this)">🃏 Flashcards</button>
+    <button class="tab" onclick="showTab('quiz',this)">🎮 Quiz</button>
+    <button class="tab" onclick="showTab('match',this)">🧩 Joguinho</button>
+  </div>
+
+<section id="study" class="section active">
+ <div class="card"><h2>1) School subjects — matérias da escola</h2><div class="grid" id="subjectsGrid"></div></div>
+ <div class="card"><h2>2) Perguntas importantes</h2>
+  <div class="dialog"><b>What do you have on Monday?</b><br>O que você tem na segunda-feira?<br><b>I have math and geography on Monday.</b></div>
+  <div class="dialog"><b>What time do you wake up?</b><br>Que horas você acorda?<br><b>I wake up at seven-thirty.</b></div>
+  <div class="dialog"><b>How do you go to school?</b><br>Como você vai para a escola?<br><b>I go to school by bus / by bike / by car / I walk.</b></div>
+ </div>
+ <div class="card"><h2>3) Daily routine — rotina diária</h2><div class="routine">
+  <div><span class="bigEmoji">⏰</span><b>wake up</b><br>acordar</div><div><span class="bigEmoji">🪥</span><b>brush my teeth</b><br>escovar os dentes</div><div><span class="bigEmoji">🥣</span><b>have breakfast</b><br>tomar café</div><div><span class="bigEmoji">🚿</span><b>take a shower</b><br>tomar banho</div><div><span class="bigEmoji">🏫</span><b>go to school</b><br>ir para a escola</div><div><span class="bigEmoji">🛌</span><b>go to bed</b><br>ir dormir</div>
+ </div></div>
+ <div class="card"><h2>4) Days and examples</h2>
+  <p><span class="pill">Monday</span><span class="pill">Tuesday</span><span class="pill">Wednesday</span><span class="pill">Thursday</span><span class="pill">Friday</span></p>
+  <p><b>Exemplos:</b> I have art and music on Tuesday. / I have science and P.E. on Wednesday.</p>
+ </div>
+</section>
+
+<section id="flashcards" class="section"><div class="card"><h2>Clique no card para virar 🪄</h2><div class="flash" id="flash"></div></div></section>
+
+<section id="quiz" class="section"><div class="card quizBox">
+ <h2>Quiz do Herói da Escola 🦸‍♀️🦸‍♂️</h2><div class="progress"><div class="bar" id="bar"></div></div><div class="qnum" id="qnum"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div id="feedback" class="feedback"></div><button class="btn hidden" id="nextBtn" onclick="nextQuestion()">Próxima pergunta ➜</button><button class="btn orange" onclick="restartQuiz()">Recomeçar</button><div class="score" id="score"></div>
+ </div></section>
+
+<section id="match" class="section"><div class="card"><h2>Jogo: combine inglês com português 🧩</h2><p>Arraste a palavra em inglês para o significado correto.</p><button class="btn" onclick="setupMatch()">Novo jogo</button><div class="gameArea" id="dragArea"></div><hr><div class="gameArea" id="dropArea"></div><div id="matchMsg" class="feedback"></div></div></section>
+</div><div class="footer">Feito para estudar brincando ⭐</div>
+<script>
+const subjects=[['math','matemática','➕'],['technology','tecnologia','💻'],['science','ciências','🔬'],['history','história','🏛️'],['P.E.','educação física','🏀'],['drama','teatro','🎭'],['geography','geografia','🌎'],['English','inglês','📖'],['art','arte','🎨'],['music','música','🎵']];
+const routines=[['wake up','acordar','⏰'],['brush my teeth','escovar os dentes','🪥'],['have breakfast','tomar café','🥣'],['take a shower','tomar banho','🚿'],['go to school','ir para a escola','🏫'],['go to bed','ir dormir','🛌']];
+const transport=[['by bus','de ônibus','🚌'],['walk','ir a pé','🚶'],['by bike','de bicicleta','🚲'],['by car','de carro','🚗']];
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+function fillStudy(){subjectsGrid.innerHTML=subjects.map(x=>`<div class="mini"><span class="bigEmoji">${x[2]}</span><span class="word">${x[0]}</span><br><span class="pt">${x[1]}</span></div>`).join('')}
+function fillFlash(){const all=[...subjects,...routines,...transport];flash.innerHTML=all.map(x=>`<div class="flip" onclick="this.classList.toggle('flipped')"><div class="inner"><div class="front">${x[2]}<br>${x[0]}</div><div class="back">${x[1]}</div></div></div>`).join('')}
+const quiz=[
+{q:'Como digo “matemática” em inglês?',a:'math',o:['math','music','history','drama'],e:'Math = matemática. Exemplo: I have math on Monday.'},
+{q:'Qual frase pergunta: “O que você tem na segunda-feira?”',a:'What do you have on Monday?',o:['What time do you wake up?','What do you have on Monday?','How do you go to school?','I go to bed.'],e:'Use: What do you have on + dia da semana?'},
+{q:'Complete: I have art and music ___ Tuesday.',a:'on',o:['in','on','at','by'],e:'Usamos ON com dias da semana: on Monday, on Tuesday.'},
+{q:'“Wake up” significa...',a:'acordar',o:['acordar','tomar banho','ir dormir','escovar os dentes'],e:'Wake up = acordar.'},
+{q:'Como digo “escovar meus dentes”?',a:'brush my teeth',o:['take a shower','go to bed','brush my teeth','have breakfast'],e:'Brush my teeth = escovar meus dentes.'},
+{q:'Qual pergunta usamos para saber o horário que a pessoa acorda?',a:'What time do you wake up?',o:['What subject do you like?','What time do you wake up?','How do you go to school?','Do you like music?'],e:'What time...? pergunta “Que horas...?”'},
+{q:'Complete: I wake up ___ seven o’clock.',a:'at',o:['on','in','by','at'],e:'Usamos AT para horários: at seven o’clock.'},
+{q:'“I go to school by bus” quer dizer...',a:'Eu vou para a escola de ônibus.',o:['Eu vou para a escola de ônibus.','Eu vou dormir às sete.','Eu tenho ciências.','Eu escovo os dentes.'],e:'By bus = de ônibus.'},
+{q:'Qual palavra significa “geografia”?',a:'geography',o:['history','geography','science','English'],e:'Geography = geografia.'},
+{q:'Qual frase está correta?',a:'I have science and P.E. on Wednesday.',o:['I have science and P.E. in Wednesday.','I has science on Wednesday.','I have science and P.E. on Wednesday.','I have by bus on Wednesday.'],e:'Com I usamos have, e com dia da semana usamos on.'},
+{q:'“Go to bed” significa...',a:'ir dormir',o:['ir para escola','ir dormir','tomar café','andar de bicicleta'],e:'Go to bed = ir para a cama / ir dormir.'},
+{q:'Como perguntar “Como você vai para a escola?”',a:'How do you go to school?',o:['How do you go to school?','What do you have on Friday?','What time is it?','Where is music?'],e:'How do you...? pergunta “Como você...?”'}
+];
+let idx=0,points=0,locked=false;
+function renderQuiz(){locked=false;nextBtn.classList.add('hidden');feedback.className='feedback';feedback.innerHTML='';qnum.textContent=`Pergunta ${idx+1} de ${quiz.length}`;question.textContent=quiz[idx].q;bar.style.width=(idx/quiz.length*100)+'%';answers.innerHTML=quiz[idx].o.map(o=>`<button class="answer" onclick="choose(this,'${o.replace(/'/g,"\\'")}')">${o}</button>`).join('');score.textContent=`Pontuação: ${points} ⭐`}
+function choose(btn,val){if(locked)return;locked=true;const item=quiz[idx];document.querySelectorAll('.answer').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct')});if(val===item.a){points++;btn.classList.add('correct');feedback.className='feedback good';feedback.innerHTML='🎉 Muito bem! '+item.e}else{btn.classList.add('wrong');feedback.className='feedback bad';feedback.innerHTML=`🌟 Quase! A resposta correta é <b>${item.a}</b>.<br>${item.e}`}score.textContent=`Pontuação: ${points} ⭐`;nextBtn.classList.remove('hidden')}
+function nextQuestion(){idx++;if(idx>=quiz.length){bar.style.width='100%';question.innerHTML='🏆 Fim do quiz!';qnum.textContent='Resultado';answers.innerHTML='';feedback.className='feedback good';feedback.innerHTML=`Você fez <b>${points}</b> de <b>${quiz.length}</b> pontos! ${points>=9?'Excelente! 🌟':points>=6?'Muito bom! Continue treinando! 💪':'Treine os flashcards e tente de novo! 😊'}`;nextBtn.classList.add('hidden')}else renderQuiz()}
+function restartQuiz(){idx=0;points=0;renderQuiz()}
+function shuffle(a){return a.sort(()=>Math.random()-.5)}
+function setupMatch(){const all=shuffle([...subjects,...routines,...transport]).slice(0,6);dragArea.innerHTML=shuffle([...all]).map(x=>`<div draggable="true" class="drag" data-key="${x[0]}">${x[2]} ${x[0]}</div>`).join('');dropArea.innerHTML=shuffle([...all]).map(x=>`<div class="drop" data-key="${x[0]}">${x[1]}</div>`).join('');matchMsg.className='feedback';matchMsg.innerHTML='';document.querySelectorAll('.drag').forEach(d=>d.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',d.dataset.key)));document.querySelectorAll('.drop').forEach(z=>{z.addEventListener('dragover',e=>e.preventDefault());z.addEventListener('drop',e=>{e.preventDefault();const key=e.dataTransfer.getData('text/plain');if(key===z.dataset.key){z.classList.add('ok');z.textContent+=' ✅';document.querySelector(`.drag[data-key="${key}"]`)?.remove();matchMsg.className='feedback good';matchMsg.innerHTML='Muito bem! Você combinou corretamente!';if(!document.querySelector('.drag'))matchMsg.innerHTML='🏆 Parabéns! Você terminou o jogo!'}else{z.classList.add('bad');matchMsg.className='feedback bad';matchMsg.innerHTML='Ops! Tente outra combinação. Pense no significado da palavra.';setTimeout(()=>z.classList.remove('bad'),700)}})})}
+fillStudy();fillFlash();renderQuiz();setupMatch();
+</script>
+</body></html>

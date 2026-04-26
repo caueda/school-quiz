@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>English Quest - School & Town</title>
+<style>
+:root{--bg:#fff7df;--card:#ffffff;--green:#6abc45;--blue:#3ca7dd;--orange:#ff9f1c;--pink:#ff6b9a;--red:#ef476f;--dark:#263238;--purple:#8e6ad8}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#fff7df,#dff7ff);color:var(--dark)}
+header{background:linear-gradient(90deg,var(--green),var(--blue));color:white;padding:22px;text-align:center;border-bottom:6px solid #ffcf33}h1{margin:0;font-size:30px}.subtitle{font-size:16px;margin-top:8px}.wrap{max-width:980px;margin:0 auto;padding:18px}.card{background:var(--card);border-radius:22px;padding:18px;margin:16px 0;box-shadow:0 8px 20px rgba(0,0,0,.12);border:3px solid rgba(255,255,255,.8)}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.tab{border:0;border-radius:999px;padding:12px 16px;font-weight:700;cursor:pointer;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.12)}.tab.active{background:var(--orange);color:white}.section{display:none}.section.active{display:block}.study-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.mini{background:#f4fbff;border-radius:16px;padding:14px;border:2px dashed #94d2ff}.mini b{color:#168aad}.pill{display:inline-block;background:#eaf7e4;border:2px solid #b8e3a7;border-radius:999px;padding:7px 10px;margin:4px;font-weight:700}.question{font-size:21px;font-weight:800;margin-bottom:12px}.options{display:grid;gap:10px}.option{padding:14px;border-radius:16px;border:2px solid #d9e4ea;background:#f8fdff;cursor:pointer;font-size:18px;text-align:left}.option:hover{transform:scale(1.01);background:#eefbff}.option.correct{background:#d8f8d2;border-color:#55b83e}.option.wrong{background:#ffe0e7;border-color:#ef476f}.feedback{margin-top:12px;padding:14px;border-radius:16px;font-weight:700;display:none}.feedback.good{display:block;background:#d8f8d2}.feedback.bad{display:block;background:#ffe8be}.bar{height:20px;background:#e6eef2;border-radius:999px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#ffd166,#06d6a0);transition:.4s}.score{font-size:20px;font-weight:800;text-align:center}.btn{border:0;border-radius:16px;padding:13px 18px;background:var(--purple);color:#fff;font-weight:800;cursor:pointer;margin:8px 4px;font-size:16px}.btn.orange{background:var(--orange)}.btn.green{background:var(--green)}input{font-size:18px;padding:12px;border-radius:12px;border:2px solid #bcd;max-width:100%;width:340px}.badge{font-size:42px;text-align:center}.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.mem{min-height:72px;border:0;border-radius:14px;background:#ffd166;font-weight:800;font-size:16px;cursor:pointer}.mem.done{background:#b7efc5}.sentence{background:#f7f7ff;border-radius:14px;padding:12px;margin:10px 0}.small{font-size:14px;color:#5f6b70}@media(max-width:600px){h1{font-size:24px}.memory-grid{grid-template-columns:repeat(2,1fr)}.question{font-size:19px}}
+</style>
+</head>
+<body>
+<header><h1>🎒 English Quest: School & Town</h1><div class="subtitle">Quiz divertido para revisar: escola, rotina, cidade, lugares, profissões, horas e perguntas.</div></header>
+<div class="wrap">
+<div class="card tabs">
+<button class="tab active" onclick="showSection('study',this)">📚 Estudar</button>
+<button class="tab" onclick="showSection('quiz',this)">⭐ Quiz</button>
+<button class="tab" onclick="showSection('write',this)">✍️ Completar</button>
+<button class="tab" onclick="showSection('memory',this)">🎮 Jogo da memória</button>
+</div>
+
+<section id="study" class="section active card">
+<h2>📚 Material de estudo rápido</h2>
+<div class="study-grid">
+<div class="mini"><h3>🏫 School subjects</h3><span class="pill">math</span><span class="pill">English</span><span class="pill">science</span><span class="pill">history</span><span class="pill">geography</span><span class="pill">art</span><span class="pill">music</span><span class="pill">P.E.</span><span class="pill">technology</span><span class="pill">drama</span><p><b>What do you have on Monday?</b><br>I have math and English.</p></div>
+<div class="mini"><h3>⏰ My day</h3><span class="pill">wake up</span><span class="pill">brush my teeth</span><span class="pill">have breakfast</span><span class="pill">take a shower</span><span class="pill">go to school</span><span class="pill">go to bed</span><p><b>What time do you wake up?</b><br>I wake up at seven o'clock.</p></div>
+<div class="mini"><h3>🏙️ Places in town</h3><span class="pill">town square</span><span class="pill">hospital</span><span class="pill">movie theater</span><span class="pill">sports center</span><span class="pill">police station</span><span class="pill">cafe</span><span class="pill">drugstore</span><span class="pill">bus stop</span><span class="pill">grocery store</span><span class="pill">store</span><p><b>There is / There are</b><br>There's a cafe. There are some stores.</p></div>
+<div class="mini"><h3>👩‍⚕️ Jobs</h3><span class="pill">doctor</span><span class="pill">sales clerk</span><span class="pill">librarian</span><span class="pill">bus driver</span><span class="pill">server</span><span class="pill">police officer</span><p><b>Is there a doctor?</b><br>Yes, there is. / No, there isn't.</p></div>
+<div class="mini"><h3>🚌 Transportation</h3><span class="pill">by bus</span><span class="pill">by bike</span><span class="pill">by car</span><span class="pill">walk</span><p><b>How do you go to school?</b><br>I go to school by bike.</p></div>
+<div class="mini"><h3>📍 Where do you live?</h3><p><b>Where do you live?</b><br>I live on Green Street.</p><p><b>Where's the park?</b><br>It's next to the grocery store.</p></div>
+</div>
+</section>
+
+<section id="quiz" class="section card">
+<h2>⭐ Quiz principal</h2><div class="bar"><div id="fill" class="fill"></div></div><p id="progress" class="score"></p><div id="quizBox"></div><button class="btn green" onclick="nextQ()">Próxima ➜</button><button class="btn orange" onclick="restartQuiz()">Recomeçar</button></section>
+
+<section id="write" class="section card">
+<h2>✍️ Complete as frases</h2><p class="small">Digite a palavra/frase em inglês. Ao errar, aparece uma dica.</p><div id="writeBox"></div><button class="btn green" onclick="checkWrite()">Conferir</button><button class="btn orange" onclick="newWrite()">Outra frase</button><div id="writeFeedback" class="feedback"></div></section>
+
+<section id="memory" class="section card">
+<h2>🎮 Jogo da memória: palavra + significado</h2><p>Encontre os pares. Exemplo: <b>hospital</b> combina com <b>hospital</b>.</p><div id="memoryGrid" class="memory-grid"></div><button class="btn orange" onclick="startMemory()">Embaralhar de novo</button><p id="memMsg" class="score"></p></section>
+</div>
+<script>
+const questions=[
+{q:'What subject is “matemática” in English?',o:['math','music','history','drama'],a:0,e:'Math = matemática.'},
+{q:'Complete: What do you have ___ Monday?',o:['in','on','at','by'],a:1,e:'Usamos ON com dias da semana: on Monday.'},
+{q:'Answer: What do you have on Tuesday?',o:['I have art.','I am art.','I go art.','I live art.'],a:0,e:'Para matérias: I have art/music/math.'},
+{q:'What is “acordar” in English?',o:['go to bed','wake up','take a shower','have breakfast'],a:1,e:'Wake up = acordar.'},
+{q:'Complete: I brush my ___ at seven o’clock.',o:['teeth','breakfast','school','bus'],a:0,e:'Brush my teeth = escovar meus dentes.'},
+{q:'What time is 7:30?',o:['seven o’clock','seven-thirty','eight o’clock','six-thirty'],a:1,e:'7:30 = seven-thirty.'},
+{q:'Complete: I go to school ___ bus.',o:['on','in','by','at'],a:2,e:'Transporte: by bus, by car, by bike.'},
+{q:'What is “farmácia/drogaria” in this book?',o:['drugstore','grocery store','sports center','town square'],a:0,e:'Drugstore = drogaria/farmácia.'},
+{q:'Where can you buy food?',o:['grocery store','police station','bus stop','hospital'],a:0,e:'Grocery store = mercado/mercearia.'},
+{q:'Complete: There ___ a cafe in my town.',o:['are','is','am','any'],a:1,e:'Singular: There is / There’s a cafe.'},
+{q:'Complete: There ___ some stores.',o:['is','isn’t','are','am'],a:2,e:'Plural: There are some stores.'},
+{q:'Complete: There aren’t ___ schools.',o:['a','an','any','is'],a:2,e:'Negativo plural: There aren’t any schools.'},
+{q:'Question: ___ there a hospital?',o:['Is','Are','Do','Does'],a:0,e:'Singular: Is there a hospital?'},
+{q:'Question: ___ there any servers?',o:['Is','Are','Do','Have'],a:1,e:'Plural: Are there any servers?'},
+{q:'Answer: Is there a bus driver?',o:['Yes, there are.','Yes, there is.','Yes, there do.','Yes, it are.'],a:1,e:'Pergunta singular com Is there: Yes, there is.'},
+{q:'Answer: Are there any cafes?',o:['No, there isn’t.','No, there aren’t.','No, there is.','No, there do.'],a:1,e:'Pergunta plural com Are there: No, there aren’t.'},
+{q:'Who helps you at the hospital?',o:['doctor','librarian','sales clerk','server'],a:0,e:'At the hospital, a doctor helps you.'},
+{q:'Who drives the bus?',o:['server','bus driver','doctor','librarian'],a:1,e:'Bus driver = motorista de ônibus.'},
+{q:'Who helps you at the library?',o:['librarian','sales clerk','server','police officer'],a:0,e:'Librarian = bibliotecário/bibliotecária.'},
+{q:'Complete: Where do you ___?',o:['live','living','lives','lived'],a:0,e:'Where do you live? = Onde você mora?'},
+{q:'Answer: Where do you live?',o:['I live on Park Street.','I am Park Street.','I have Park Street.','There is Park Street.'],a:0,e:'Resposta correta: I live on + nome da rua.'},
+{q:'Complete: The park is next ___ the grocery store.',o:['to','in','at','by'],a:0,e:'Next to = ao lado de/perto de.'},
+{q:'What is “P.E.”?',o:['Physical Education','Perfect English','Police Exercise','Park Entry'],a:0,e:'P.E. = Physical Education, educação física.'},
+{q:'Which sentence is correct?',o:['I have math on Monday.','I has math in Monday.','I have math at Monday.','I am math on Monday.'],a:0,e:'I have + subject + on + day.'}
+];
+let qi=0,score=0,answered=false;
+function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+function renderQ(){answered=false;let q=questions[qi];document.getElementById('progress').textContent=`Pergunta ${qi+1}/${questions.length} • Pontos: ${score}`;document.getElementById('fill').style.width=((qi)/questions.length*100)+'%';let html=`<div class='question'>${q.q}</div><div class='options'>`;q.o.forEach((op,i)=>html+=`<button class='option' onclick='answer(${i},this)'>${op}</button>`);html+=`</div><div id='fb' class='feedback'></div>`;document.getElementById('quizBox').innerHTML=html}
+function answer(i,el){if(answered)return;answered=true;let q=questions[qi];let fb=document.getElementById('fb');document.querySelectorAll('.option').forEach((b,idx)=>{if(idx===q.a)b.classList.add('correct')});if(i===q.a){score++;el.classList.add('correct');fb.className='feedback good';fb.innerHTML='🎉 Correct! '+q.e}else{el.classList.add('wrong');fb.className='feedback bad';fb.innerHTML='💡 Quase! A resposta correta é: <b>'+q.o[q.a]+'</b>.<br>'+q.e}}
+function nextQ(){if(qi<questions.length-1){qi++;renderQ()}else{document.getElementById('fill').style.width='100%';document.getElementById('quizBox').innerHTML=`<div class='badge'>🏆</div><h2>Você terminou!</h2><p class='score'>Pontuação: ${score}/${questions.length}</p><p>${score>20?'Amazing! Você está pronto para a prova!':score>14?'Good job! Revise as frases que errou e tente de novo.':'Continue praticando! Volte em Estudar e tente novamente.'}</p>`}}
+function restartQuiz(){qi=0;score=0;renderQ()}
+const writes=[
+{p:'I go to school ___ bus.',a:['by'],h:'Usamos by com transporte.'},
+{p:'There ___ a hospital.',a:['is'],h:'Hospital é singular.'},
+{p:'There ___ some stores.',a:['are'],h:'Stores está no plural.'},
+{p:'There aren’t ___ cafes.',a:['any'],h:'Negativo plural usa any.'},
+{p:'Where do you ___?',a:['live'],h:'Pergunta: Where do you live?'},
+{p:'I live ___ Green Street.',a:['on'],h:'Rua em inglês: on Green Street.'},
+{p:'What time do you ___ up?',a:['wake'],h:'Wake up = acordar.'},
+{p:'I brush my ___.',a:['teeth'],h:'Brush my teeth.'},
+{p:'I have math ___ Monday.',a:['on'],h:'Dias da semana usam on.'},
+{p:'Are there ___ police officers?',a:['any'],h:'Pergunta plural usa any.'}
+];let wi=0;
+function newWrite(){wi=Math.floor(Math.random()*writes.length);let w=writes[wi];document.getElementById('writeBox').innerHTML=`<div class='sentence'><b>${w.p.replace('___','<input id="writeInput" placeholder="digite aqui">')}</b></div>`;document.getElementById('writeFeedback').style.display='none'}
+function checkWrite(){let val=document.getElementById('writeInput').value.trim().toLowerCase();let w=writes[wi];let fb=document.getElementById('writeFeedback');if(w.a.includes(val)){fb.className='feedback good';fb.innerHTML='🌟 Correct! Muito bem!'}else{fb.className='feedback bad';fb.innerHTML='💡 Dica: '+w.h+'<br>Resposta: <b>'+w.a[0]+'</b>'}}
+const pairs=[['math','matemática'],['drugstore','drogaria'],['doctor','médico(a)'],['bus driver','motorista'],['wake up','acordar'],['by bike','de bicicleta'],['hospital','hospital'],['town square','praça']];let first=null,lock=false,matched=0;
+function startMemory(){matched=0;first=null;lock=false;let cards=[];pairs.forEach((p,idx)=>{cards.push({t:p[0],id:idx});cards.push({t:p[1],id:idx})});cards.sort(()=>Math.random()-.5);document.getElementById('memoryGrid').innerHTML=cards.map((c,i)=>`<button class='mem' data-id='${c.id}' data-text='${c.t}' onclick='flip(this)'>❓</button>`).join('');document.getElementById('memMsg').textContent=''}
+function flip(btn){if(lock||btn.classList.contains('done')||btn===first)return;btn.textContent=btn.dataset.text;if(!first){first=btn;return}lock=true;if(first.dataset.id===btn.dataset.id){first.classList.add('done');btn.classList.add('done');matched++;first=null;lock=false;if(matched===pairs.length)document.getElementById('memMsg').textContent='🎉 Parabéns! Você achou todos os pares!'}else{setTimeout(()=>{first.textContent='❓';btn.textContent='❓';first=null;lock=false},900)}}
+renderQ();newWrite();startMemory();
+</script>
+</body>
+</html>
