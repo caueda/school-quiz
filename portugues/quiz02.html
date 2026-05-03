@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Quiz Desafio - Língua Portuguesa</title>
+<style>
+:root{--blue:#2563eb;--green:#16a34a;--red:#dc2626;--purple:#7c3aed;--pink:#ec4899;--orange:#f97316;--cyan:#0891b2;--text:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#dbeafe,#ecfeff 38%,#fff7ed 70%,#fdf2f8);color:var(--text);-webkit-tap-highlight-color:transparent}
+.app{width:min(980px,100%);margin:0 auto;padding:16px}
+header{background:white;border-radius:26px;padding:20px;box-shadow:0 14px 32px rgba(15,23,42,.13);text-align:center;border:3px solid #93c5fd}
+h1{margin:0;font-size:clamp(27px,7vw,50px);color:var(--blue);line-height:1.05}
+.subtitle{font-size:clamp(16px,4vw,21px);margin:10px 0 0;color:#475569}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.badge{padding:8px 12px;border-radius:999px;background:#eef2ff;color:#4338ca;font-weight:900;font-size:14px}
+.progress-card{margin-top:16px;background:white;padding:14px;border-radius:18px;box-shadow:0 8px 22px rgba(15,23,42,.08)}
+.progress-info{display:flex;justify-content:space-between;gap:10px;font-weight:950;margin-bottom:8px;font-size:15px}
+.bar{width:100%;height:16px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--cyan),var(--purple),var(--pink));transition:width .35s ease}
+.card{margin-top:18px;background:white;border-radius:26px;padding:20px;box-shadow:0 14px 35px rgba(15,23,42,.12);border:3px solid #d8b4fe}
+.topic{display:inline-block;padding:7px 12px;border-radius:999px;font-size:14px;font-weight:950;color:white;background:linear-gradient(90deg,var(--purple),var(--pink));margin-bottom:10px}
+.question{font-size:clamp(22px,5vw,31px);line-height:1.18;font-weight:1000;margin:8px 0 16px}
+.helper{color:#64748b;font-size:16px;margin-top:-5px;margin-bottom:14px}
+.options{display:grid;gap:12px}
+button{font-family:inherit;font-size:18px;border:none;cursor:pointer;touch-action:manipulation}
+.option{width:100%;text-align:left;background:#f8fafc;border:3px solid #cbd5e1;border-radius:18px;padding:16px;font-weight:850;color:#1e293b;min-height:58px;transition:transform .08s ease,border-color .2s ease,background .2s ease}
+.option:active{transform:scale(.98)}
+.option.correct{border-color:#22c55e;background:#dcfce7}
+.option.wrong{border-color:#ef4444;background:#fee2e2}
+.option:disabled{cursor:default;opacity:1}
+.feedback{display:none;margin-top:16px;padding:16px;border-radius:18px;font-size:17px;line-height:1.45;font-weight:650}
+.feedback.show{display:block}.feedback.ok{background:#dcfce7;border:3px solid #22c55e}.feedback.no{background:#fee2e2;border:3px solid #ef4444}
+.feedback-title{font-size:22px;font-weight:1000;margin-bottom:6px}
+.next-btn,.restart-btn{width:100%;margin-top:16px;padding:17px;border-radius:18px;color:white;font-weight:1000;background:linear-gradient(90deg,var(--blue),var(--purple));box-shadow:0 8px 20px rgba(37,99,235,.25)}
+.next-btn:disabled{background:#94a3b8;box-shadow:none}
+.check-btn{width:100%;padding:17px;border-radius:18px;color:white;font-weight:1000;background:linear-gradient(90deg,var(--orange),var(--pink));margin-top:10px}
+.mini-game{display:grid;gap:12px}
+.match-row{background:#f8fafc;border:3px solid #cbd5e1;border-radius:18px;padding:14px}
+.match-term{font-weight:1000;font-size:20px;margin-bottom:8px;color:#1d4ed8}
+select{width:100%;font-size:18px;padding:14px;border-radius:14px;border:2px solid #94a3b8;background:white}
+.word-chip{display:inline-block;background:#fef3c7;border:2px solid #f59e0b;border-radius:999px;padding:5px 10px;font-weight:1000}
+.result-screen{text-align:center;padding:20px}
+.score-big{font-size:clamp(44px,13vw,82px);font-weight:1000;color:var(--green);margin:8px 0}
+.summary-box{text-align:left;background:#f8fafc;border:3px solid #cbd5e1;border-radius:20px;padding:16px;margin-top:16px;font-size:16px;line-height:1.45}
+.summary-box h3{margin-top:0;color:var(--blue)}
+.tip-box{background:#fff7ed;border:3px solid #fdba74;border-radius:18px;padding:14px;margin:14px 0;font-size:16px;line-height:1.4}
+.stars{font-size:34px;letter-spacing:4px}.footer-note{text-align:center;color:#64748b;font-size:13px;margin:20px 0}
+@media(max-width:520px){.app{padding:12px}.card{padding:16px;border-radius:22px}.option{font-size:17px;padding:15px}.progress-info{font-size:14px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header>
+<h1>🚀 Quiz Desafio de Português</h1>
+<p class="subtitle">Agora é para pensar! Novas palavras, novas situações e explicações para aprender de verdade.</p>
+<div class="badge-row"><span class="badge">📱 Celular OK</span><span class="badge">🧩 Sem arrastar</span><span class="badge">🏆 Desafiador</span></div>
+</header>
+<section class="progress-card"><div class="progress-info"><span id="questionCounter">Questão 1</span><span id="scoreCounter">Pontos: 0</span></div><div class="bar"><div class="bar-fill" id="barFill"></div></div></section>
+<section class="card" id="quizCard"></section>
+<p class="footer-note">Objetivo: reconhecer o conteúdo em exemplos novos, não apenas decorar os exemplos da imagem.</p>
+</main>
+
+<script>
+const questions=[
+{type:"choice",topic:"Aquecimento dos Detetives 🕵️",q:"Em qual palavra há DITONGO?",helper:"Ditongo = duas vogais na mesma sílaba. Fale a palavra em voz alta.",options:["moeda","peixe","saúde","baú"],answer:1,explanation:"A palavra “peixe” tem ditongo, porque o som de “ei” aparece junto na mesma sílaba: pei-xe. Já “moeda”, “saúde” e “baú” têm vogais separadas em sílabas diferentes."},
+{type:"choice",topic:"Encontros Vocálicos",q:"Qual palavra apresenta HIATO?",helper:"Hiato = vogais separadas em sílabas diferentes.",options:["cuidado","caixa","poeta","herói"],answer:2,explanation:"“Poeta” tem hiato: po-e-ta. As vogais “o” e “e” ficam separadas. Em ditongo, as vogais ficam juntas na mesma sílaba."},
+{type:"choice",topic:"Encontros Vocálicos",q:"A palavra “iguais” tem qual encontro vocálico em “uai”?",helper:"Três sons vocálicos juntos na mesma sílaba formam um tritongo.",options:["Ditongo","Hiato","Tritongo","Onomatopeia"],answer:2,explanation:"“Iguais” tem tritongo no som “uai”, porque há três sons vocálicos juntos na mesma sílaba."},
+{type:"choice",topic:"Encontros Vocálicos",q:"Qual alternativa tem uma palavra com HIATO?",helper:"Procure vogais que se separam: a-é, o-e, a-ú, e-a...",options:["noite","rainha","cadeira","tesouro"],answer:1,explanation:"“Rainha” tem hiato: ra-i-nha. As vogais “a” e “i” são separadas. “Noite”, “cadeira” e “tesouro” têm sons vocálicos que normalmente ficam juntos."},
+{type:"choice",topic:"Encontros Vocálicos",q:"Na palavra “herói”, temos:",helper:"Observe o som final: ói.",options:["Ditongo","Tritongo","Hiato","Marca registrada"],answer:0,explanation:"“Herói” tem ditongo no final, pois “ói” é pronunciado junto na mesma sílaba."},
+{type:"choice",topic:"Encontros Vocálicos",q:"Qual palavra tem TRITONGO?",helper:"Tritongo = três vogais na mesma sílaba.",options:["enxaguei","saída","papai","lua"],answer:0,explanation:"“Enxaguei” tem tritongo no final: guei. É um encontro de três sons vocálicos na mesma sílaba."},
+{type:"choice",topic:"Jornalismo: Rádio e TV 🎙️",q:"Uma notícia foi transmitida com vídeo do local, fala do repórter e imagens da enchente. Isso é mais típico de:",helper:"Pense: imagem + som.",options:["Rádio","TV","Bilhete","Marca registrada"],answer:1,explanation:"A TV usa imagem e som. Por isso consegue mostrar o local, as pessoas, os acontecimentos e ainda transmitir a voz."},
+{type:"choice",topic:"Jornalismo: Rádio e TV",q:"Quem provavelmente segura o microfone e faz perguntas na rua?",helper:"Ele vai até o local para buscar informações.",options:["Apresentador","Repórter","Leitor","Personagem da HQ"],answer:1,explanation:"O repórter entrevista pessoas, vai aos lugares e traz informações para a notícia."},
+{type:"choice",topic:"Jornalismo: Rádio e TV",q:"Se a informação chega apenas pelo ouvido, sem imagem, estamos falando principalmente de:",helper:"Somente som.",options:["TV","Rádio","História em quadrinhos","Entrevista escrita"],answer:1,explanation:"No rádio, a informação chega pelo som. A pessoa escuta a voz, músicas, efeitos e notícias, mas não vê imagens."},
+{type:"choice",topic:"A Entrevista 🎤",q:"Qual parte da entrevista apresenta o assunto e quem será entrevistado?",helper:"Ela vem antes das perguntas.",options:["Título","Texto de apresentação","Resposta","Onomatopeia"],answer:1,explanation:"O texto de apresentação introduz o assunto e apresenta o entrevistado, preparando o leitor ou ouvinte para a entrevista."},
+{type:"choice",topic:"A Entrevista",q:"Qual opção parece mais uma PERGUNTA de entrevista?",helper:"Pergunta costuma buscar uma resposta do entrevistado.",options:["A médica explicou a descoberta.","Como você descobriu esse projeto?","O projeto começou em 2020.","Muito obrigado pela entrevista."],answer:1,explanation:"“Como você descobriu esse projeto?” é uma pergunta. Ela pede uma resposta do entrevistado."},
+{type:"choice",topic:"Concordância Verbal ⚡",q:"Escolha a frase correta:",helper:"Primeiro encontre o sujeito. Depois veja se o verbo concorda.",options:["As meninas joga bola.","O menino jogam bola.","As meninas jogam bola.","Eles brinca no parque."],answer:2,explanation:"“As meninas” está no plural. Portanto, o verbo também fica no plural: “jogam”."},
+{type:"choice",topic:"Concordância Verbal",q:"Complete: “Os cachorros _____ no quintal.”",helper:"Os cachorros = plural.",options:["corre","correm","corria","correu"],answer:1,explanation:"Como “os cachorros” está no plural, o verbo também deve estar no plural: “Os cachorros correm no quintal.”"},
+{type:"choice",topic:"Concordância Verbal",q:"Qual frase tem ERRO de concordância?",helper:"Procure sujeito plural com verbo singular, ou sujeito singular com verbo plural.",options:["A criança estuda.","Os alunos estudam.","A professora explicam a lição.","Nós gostamos de histórias."],answer:2,explanation:"A frase errada é “A professora explicam a lição”. O correto é “A professora explica a lição”, porque o sujeito está no singular."},
+{type:"choice",topic:"HQ - Histórias em Quadrinhos 💥",q:"Em uma HQ, o que mistura palavras e imagens para contar uma história?",helper:"HQ não depende só de texto. As imagens também contam.",options:["A sequência de quadrinhos","A marca registrada","O rádio","O título da entrevista"],answer:0,explanation:"A HQ conta uma história por meio de quadrinhos em sequência, misturando texto verbal e imagens."},
+{type:"choice",topic:"Elementos das HQs",q:"Se aparece “CRASH!” em uma cena de queda, isso é:",helper:"É uma palavra que imita um som.",options:["Balão de pensamento","Onomatopeia","Texto de apresentação","Concordância verbal"],answer:1,explanation:"“CRASH!” é onomatopeia, pois imita o som de algo quebrando ou caindo."},
+{type:"choice",topic:"Elementos das HQs",q:"Um balão com formato de nuvem geralmente indica:",helper:"Na imagem, esse tipo de balão mostra o que está dentro da cabeça do personagem.",options:["Fala","Pensamento","Marca registrada","Título"],answer:1,explanation:"O balão de pensamento indica que o personagem está pensando, não falando em voz alta."},
+{type:"choice",topic:"Elementos das HQs",q:"A caixa do narrador em uma HQ serve para:",helper:"Ela costuma aparecer como um texto em uma caixa.",options:["Mostrar que a marca é registrada","Imitar barulho","Narrar, explicar tempo, lugar ou acontecimentos","Fazer perguntas ao entrevistado"],answer:2,explanation:"A caixa do narrador traz informações da história, como tempo, lugar ou algo que aconteceu."},
+{type:"choice",topic:"Marca Registrada ®",q:"Em “SuperTênis®”, o símbolo ® indica que:",helper:"Esse símbolo aparece junto a marcas.",options:["A palavra tem hiato","A marca é registrada","A frase está no plural","A palavra imita um som"],answer:1,explanation:"O símbolo ® indica marca registrada. Ele mostra que aquela marca pertence legalmente a alguém ou a uma empresa."},
+{type:"match",topic:"Missão Final dos Campeões 🏆",q:"Combine cada palavra ou situação com a classificação correta.",helper:"Toque e escolha. Não precisa arrastar, então funciona bem no celular.",pairs:[{term:"baú",answer:"Hiato"},{term:"cai",answer:"Ditongo"},{term:"saguão",answer:"Tritongo"},{term:"MIAU!",answer:"Onomatopeia"},{term:"Eles cantam",answer:"Concordância correta"}],choices:["Ditongo","Hiato","Tritongo","Onomatopeia","Concordância correta"],explanation:"Ótimo desafio! “Baú” tem hiato; “cai” tem ditongo; “saguão” pode apresentar tritongo no som “uão”; “MIAU!” imita som; “Eles cantam” tem concordância correta."}
+];
+
+let current=0,score=0,answered=false;
+const quizCard=document.getElementById("quizCard"),questionCounter=document.getElementById("questionCounter"),scoreCounter=document.getElementById("scoreCounter"),barFill=document.getElementById("barFill");
+
+function updateTop(){questionCounter.textContent=current<questions.length?`Questão ${current+1} de ${questions.length}`:"Resultado final";scoreCounter.textContent=`Pontos: ${score}`;barFill.style.width=`${(current/questions.length)*100}%`}
+
+function renderQuestion(){
+ answered=false;updateTop();const item=questions[current];
+ if(item.type==="choice"){
+  quizCard.innerHTML=`<span class="topic">${item.topic}</span><div class="question">${item.q}</div><p class="helper">${item.helper}</p><div class="tip-box">💡 Dica de estudo: não tente decorar. Fale a palavra devagar e perceba se as vogais ficam juntas ou separadas.</div><div class="options">${item.options.map((op,i)=>`<button class="option" type="button" onclick="chooseAnswer(${i})">${op}</button>`).join("")}</div><div id="feedback" class="feedback"></div><button id="nextBtn" class="next-btn" type="button" onclick="nextQuestion()" disabled>Próxima missão ➜</button>`;
+ }else{
+  quizCard.innerHTML=`<span class="topic">${item.topic}</span><div class="question">${item.q}</div><p class="helper">${item.helper}</p><div class="mini-game">${item.pairs.map((p,i)=>`<div class="match-row"><div class="match-term">${p.term}</div><select id="match-${i}"><option value="">Toque aqui e escolha...</option>${item.choices.map(c=>`<option value="${c}">${c}</option>`).join("")}</select></div>`).join("")}</div><button class="check-btn" type="button" onclick="checkMatch()">Conferir desafio ⭐</button><div id="feedback" class="feedback"></div><button id="nextBtn" class="next-btn" type="button" onclick="nextQuestion()" disabled>Ver resultado final 🏁</button>`;
+ }
+}
+
+function chooseAnswer(index){
+ if(answered)return;answered=true;
+ const item=questions[current],buttons=document.querySelectorAll(".option"),feedback=document.getElementById("feedback"),nextBtn=document.getElementById("nextBtn");
+ buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.answer)btn.classList.add("correct");if(i===index&&i!==item.answer)btn.classList.add("wrong")});
+ if(index===item.answer){score+=10;feedback.className="feedback ok show";feedback.innerHTML=`<div class="feedback-title">🎉 Acertou!</div>${item.explanation}`}
+ else{feedback.className="feedback no show";feedback.innerHTML=`<div class="feedback-title">💡 Boa tentativa!</div>A resposta correta é: <strong>${item.options[item.answer]}</strong>.<br><br>${item.explanation}<br><br>📌 Tente falar a palavra em voz alta para perceber melhor os sons.`}
+ scoreCounter.textContent=`Pontos: ${score}`;nextBtn.disabled=false;
+}
+
+function checkMatch(){
+ if(answered)return;answered=true;
+ const item=questions[current];let correct=0;
+ item.pairs.forEach((p,i)=>{if(document.getElementById(`match-${i}`).value===p.answer)correct++});
+ const feedback=document.getElementById("feedback"),nextBtn=document.getElementById("nextBtn");
+ if(correct===item.pairs.length){score+=25;feedback.className="feedback ok show";feedback.innerHTML=`<div class="feedback-title">🏆 Desafio perfeito!</div>${item.explanation}`}
+ else{score+=correct*4;feedback.className="feedback no show";feedback.innerHTML=`<div class="feedback-title">💡 Você acertou ${correct} de ${item.pairs.length}.</div>Revisão rápida:<br><strong>baú</strong> = hiato, pois ba-ú separa as vogais.<br><strong>cai</strong> = ditongo, pois ai fica junto.<br><strong>saguão</strong> = tritongo no som uão.<br><strong>MIAU!</strong> = onomatopeia, porque imita som.<br><strong>Eles cantam</strong> = concordância correta: sujeito e verbo no plural.`}
+ scoreCounter.textContent=`Pontos: ${score}`;nextBtn.disabled=false;document.querySelectorAll("select").forEach(s=>s.disabled=true);
+}
+
+function nextQuestion(){current++;if(current>=questions.length)showResult();else{renderQuestion();window.scrollTo({top:0,behavior:"smooth"})}}
+
+function showResult(){
+ barFill.style.width="100%";questionCounter.textContent="Resultado final";
+ const max=(questions.length-1)*10+25,percent=Math.round((score/max)*100);
+ let message="",stars="";
+ if(percent>=88){message="Sensacional! Você não apenas decorou: mostrou que consegue identificar os conteúdos em novos exemplos.";stars="⭐⭐⭐⭐⭐"}
+ else if(percent>=68){message="Muito bom! Você já entendeu bastante. Agora revise os erros e jogue de novo para fortalecer a memória.";stars="⭐⭐⭐⭐"}
+ else{message="Continue treinando! Leia as explicações com calma e refaça o quiz. Aprender é praticar.";stars="⭐⭐⭐"}
+ quizCard.innerHTML=`<div class="result-screen"><h2>🎉 Fim do Desafio!</h2><div class="stars">${stars}</div><div class="score-big">${percent}%</div><p style="font-size:20px;font-weight:850;">${message}</p><div class="summary-box"><h3>📚 Macetes para a prova</h3><p><strong>Ditongo:</strong> duas vogais ficam juntas na mesma sílaba. Exemplos novos: peixe, caixa, herói, cai.</p><p><strong>Hiato:</strong> vogais ficam separadas em sílabas diferentes. Exemplos novos: ba-ú, po-e-ta, sa-ú-de, ra-i-nha.</p><p><strong>Tritongo:</strong> três sons vocálicos juntos na mesma sílaba. Exemplos novos: i-guais, en-xa-guei, sa-guão.</p><p><strong>Rádio e TV:</strong> rádio usa som; TV usa imagem e som.</p><p><strong>Entrevista:</strong> tem apresentação, pergunta e resposta.</p><p><strong>Concordância verbal:</strong> sujeito singular pede verbo singular; sujeito plural pede verbo plural.</p><p><strong>HQ:</strong> usa imagens e palavras. Tem balão de fala, pensamento, onomatopeia e caixa do narrador.</p><p><strong>Marca registrada:</strong> ® mostra que a marca é registrada.</p></div><button class="restart-btn" type="button" onclick="restartQuiz()">Jogar novamente 🔁</button></div>`;
+}
+
+function restartQuiz(){current=0;score=0;renderQuestion();window.scrollTo({top:0,behavior:"smooth"})}
+renderQuestion();
+</script>
+</body>
+</html>
