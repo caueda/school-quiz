@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Quiz de Matemática - Revisão Divertida</title>
+  <style>
+    :root {
+      --blue:#2563eb; --green:#16a34a; --red:#dc2626; --purple:#7c3aed;
+      --pink:#ec4899; --orange:#f97316; --yellow:#facc15; --cyan:#0891b2;
+      --text:#172033; --muted:#64748b; --card:#fff;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#dbeafe,#ecfeff 35%,#fff7ed 70%,#fdf2f8);
+      color:var(--text);
+      -webkit-tap-highlight-color:transparent;
+    }
+    .app { width:min(980px,100%); margin:0 auto; padding:16px; }
+    header {
+      background:white; border-radius:28px; padding:22px;
+      box-shadow:0 14px 34px rgba(15,23,42,.14);
+      text-align:center; border:4px solid #93c5fd;
+    }
+    h1 { margin:0; font-size:clamp(28px,7vw,52px); color:var(--blue); line-height:1.05; }
+    .subtitle { font-size:clamp(16px,4vw,21px); color:#475569; margin:10px 0 0; }
+    .badge-row { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .badge { padding:8px 12px; border-radius:999px; background:#eef2ff; color:#4338ca; font-weight:900; font-size:14px; }
+    .progress-card {
+      margin-top:16px; background:white; padding:14px; border-radius:18px;
+      box-shadow:0 8px 22px rgba(15,23,42,.08);
+    }
+    .progress-info { display:flex; justify-content:space-between; gap:10px; font-weight:950; margin-bottom:8px; font-size:15px; }
+    .bar { width:100%; height:16px; background:#e2e8f0; border-radius:999px; overflow:hidden; }
+    .bar-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--green),var(--cyan),var(--purple),var(--pink)); transition:width .35s ease; }
+    .card {
+      margin-top:18px; background:var(--card); border-radius:28px; padding:20px;
+      box-shadow:0 14px 35px rgba(15,23,42,.12); border:4px solid #d8b4fe;
+    }
+    .topic { display:inline-block; padding:7px 12px; border-radius:999px; font-size:14px; font-weight:950; color:white; background:linear-gradient(90deg,var(--purple),var(--pink)); margin-bottom:10px; }
+    .question { font-size:clamp(22px,5vw,31px); line-height:1.18; font-weight:1000; margin:8px 0 16px; }
+    .helper { color:var(--muted); font-size:16px; margin-top:-5px; margin-bottom:14px; }
+    .tip-box { background:#fff7ed; border:3px solid #fdba74; border-radius:18px; padding:14px; margin:14px 0; font-size:16px; line-height:1.4; font-weight:700; }
+    .options { display:grid; gap:12px; }
+    button { font-family:inherit; font-size:18px; border:none; cursor:pointer; touch-action:manipulation; }
+    .option {
+      width:100%; text-align:left; background:#f8fafc; border:3px solid #cbd5e1;
+      border-radius:18px; padding:16px; font-weight:850; color:#1e293b; min-height:58px;
+      transition:transform .08s ease,border-color .2s ease,background .2s ease;
+    }
+    .option:active { transform:scale(.98); }
+    .option.correct { border-color:#22c55e; background:#dcfce7; }
+    .option.wrong { border-color:#ef4444; background:#fee2e2; }
+    .option:disabled { cursor:default; opacity:1; }
+    .feedback { display:none; margin-top:16px; padding:16px; border-radius:18px; font-size:17px; line-height:1.45; font-weight:650; }
+    .feedback.show { display:block; }
+    .feedback.ok { background:#dcfce7; border:3px solid #22c55e; }
+    .feedback.no { background:#fee2e2; border:3px solid #ef4444; }
+    .feedback-title { font-size:22px; font-weight:1000; margin-bottom:6px; }
+    .next-btn,.restart-btn {
+      width:100%; margin-top:16px; padding:17px; border-radius:18px; color:white;
+      font-weight:1000; background:linear-gradient(90deg,var(--blue),var(--purple));
+      box-shadow:0 8px 20px rgba(37,99,235,.25);
+    }
+    .next-btn:disabled { background:#94a3b8; box-shadow:none; }
+    .check-btn {
+      width:100%; padding:17px; border-radius:18px; color:white; font-weight:1000;
+      background:linear-gradient(90deg,var(--orange),var(--pink)); margin-top:10px;
+    }
+    .mini-game { display:grid; gap:12px; }
+    .match-row { background:#f8fafc; border:3px solid #cbd5e1; border-radius:18px; padding:14px; }
+    .match-term { font-weight:1000; font-size:20px; margin-bottom:8px; color:#1d4ed8; }
+    select,input[type="number"] { width:100%; font-size:18px; padding:14px; border-radius:14px; border:2px solid #94a3b8; background:white; }
+    .visual {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:12px; margin:10px 0 14px;
+    }
+    .shape-card {
+      background:#f8fafc; border:3px solid #cbd5e1; border-radius:18px; padding:12px; text-align:center;
+      font-weight:900;
+    }
+    .shape { width:72px; height:72px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:42px; }
+    .money { font-size:34px; }
+    .result-screen { text-align:center; padding:20px; }
+    .score-big { font-size:clamp(44px,13vw,82px); font-weight:1000; color:var(--green); margin:8px 0; }
+    .summary-box { text-align:left; background:#f8fafc; border:3px solid #cbd5e1; border-radius:20px; padding:16px; margin-top:16px; font-size:16px; line-height:1.45; }
+    .summary-box h3 { margin-top:0; color:var(--blue); }
+    .stars { font-size:34px; letter-spacing:4px; }
+    .footer-note { text-align:center; color:#64748b; font-size:13px; margin:20px 0; }
+    @media(max-width:520px){
+      .app{padding:12px}.card{padding:16px;border-radius:22px}.option{font-size:17px;padding:15px}.progress-info{font-size:14px}
+    }
+  </style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <h1>🎲 Quiz Matemático da Júlia</h1>
+    <p class="subtitle">Uma revisão divertida para treinar formas, ângulos, dinheiro, operações e problemas!</p>
+    <div class="badge-row">
+      <span class="badge">📱 iPhone, Android e computador</span>
+      <span class="badge">🧠 Explica quando erra</span>
+      <span class="badge">🏆 Desafio final</span>
+    </div>
+  </header>
+
+  <section class="progress-card">
+    <div class="progress-info">
+      <span id="questionCounter">Questão 1</span>
+      <span id="scoreCounter">Pontos: 0</span>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  </section>
+
+  <section class="card" id="quizCard"></section>
+  <p class="footer-note">Dica: leia com calma, pense como um detetive e confira as explicações.</p>
+</main>
+
+<script>
+const questions = [
+  {
+    type:"choice",
+    topic:"1. Polígonos 🔷",
+    q:"Qual destas figuras é um polígono?",
+    helper:"Polígono é uma figura fechada formada só por linhas retas.",
+    visual:"shapes1",
+    options:["Círculo","Triângulo","Linha curva aberta","Oval"],
+    answer:1,
+    explanation:"O triângulo é um polígono porque é fechado e tem apenas lados retos. Círculo e oval têm curvas, então não são polígonos."
+  },
+  {
+    type:"choice",
+    topic:"1. Polígonos 🔷",
+    q:"Um hexágono tem quantos lados?",
+    helper:"Use a dica: triângulo = 3, quadrilátero = 4, pentágono = 5...",
+    options:["4 lados","5 lados","6 lados","8 lados"],
+    answer:2,
+    explanation:"Hexágono tem 6 lados. Um jeito de memorizar: hexa lembra 6."
+  },
+  {
+    type:"choice",
+    topic:"1. Polígonos 🔷",
+    q:"Qual grupo está em ordem correta de quantidade de lados?",
+    helper:"Conte os lados: triângulo, quadrilátero, pentágono, hexágono.",
+    options:["3, 4, 5, 6","4, 3, 6, 5","5, 4, 3, 6","6, 5, 4, 3"],
+    answer:0,
+    explanation:"A ordem correta é: triângulo = 3 lados, quadrilátero = 4, pentágono = 5, hexágono = 6."
+  },
+  {
+    type:"choice",
+    topic:"2. Ângulos 📐",
+    q:"Qual ângulo parece a quina de um caderno ou um L perfeito?",
+    helper:"Esse ângulo mede 90 graus.",
+    options:["Ângulo reto","Ângulo agudo","Ângulo obtuso","Ângulo redondo"],
+    answer:0,
+    explanation:"O ângulo reto mede 90°. Ele parece um L, como o canto de uma folha ou de um caderno."
+  },
+  {
+    type:"choice",
+    topic:"2. Ângulos 📐",
+    q:"Um ângulo menor que 90° é chamado de:",
+    helper:"Ele é mais fechadinho, como uma pontinha.",
+    options:["Obtuso","Agudo","Reto","Polígono"],
+    answer:1,
+    explanation:"O ângulo agudo é menor que 90°. Pense nele como um ângulo mais fechado."
+  },
+  {
+    type:"choice",
+    topic:"2. Ângulos 📐",
+    q:"Um ângulo maior que 90° e menor que 180° é:",
+    helper:"Ele é mais aberto que o ângulo reto.",
+    options:["Agudo","Reto","Obtuso","Hexágono"],
+    answer:2,
+    explanation:"Ângulo obtuso é maior que 90° e menor que 180°. Ele é mais aberto que um L."
+  },
+  {
+    type:"choice",
+    topic:"3. Dinheiro 💰",
+    q:"Você tem uma nota de R$ 50 e ganha mais uma nota de R$ 20. Quanto fica ao todo?",
+    helper:"Quando juntamos valores, usamos adição.",
+    visual:"money1",
+    options:["R$ 30","R$ 60","R$ 70","R$ 80"],
+    answer:2,
+    explanation:"R$ 50 + R$ 20 = R$ 70. Adição significa juntar valores."
+  },
+  {
+    type:"choice",
+    topic:"3. Dinheiro 💰",
+    q:"Um brinquedo custa R$ 35. Você paga com R$ 50. Qual é o troco?",
+    helper:"Troco é o que sobra: valor pago menos preço.",
+    options:["R$ 10","R$ 15","R$ 20","R$ 25"],
+    answer:1,
+    explanation:"R$ 50 - R$ 35 = R$ 15. O troco é R$ 15."
+  },
+  {
+    type:"choice",
+    topic:"3. Dinheiro 💰",
+    q:"Qual conta representa comprar 3 itens: R$ 12, R$ 8 e R$ 20?",
+    helper:"Para saber o total da compra, somamos os valores.",
+    options:["12 - 8 - 20","12 + 8 + 20","20 - 12 + 8","12 × 8 × 20"],
+    answer:1,
+    explanation:"Para juntar os valores dos itens, usamos adição: 12 + 8 + 20 = 40."
+  },
+  {
+    type:"choice",
+    topic:"4. Adição e Subtração ➕➖",
+    q:"Qual é o resultado de 327 + 145?",
+    helper:"Alinhe unidade com unidade, dezena com dezena e centena com centena.",
+    options:["462","472","482","572"],
+    answer:1,
+    explanation:"327 + 145 = 472. Somamos por colunas: unidades, dezenas e centenas."
+  },
+  {
+    type:"choice",
+    topic:"4. Adição e Subtração ➕➖",
+    q:"Qual é o resultado de 800 - 275?",
+    helper:"Subtração é tirar uma quantidade de outra.",
+    options:["525","535","625","575"],
+    answer:0,
+    explanation:"800 - 275 = 525. Na subtração, é importante organizar os números por colunas."
+  },
+  {
+    type:"choice",
+    topic:"4. Adição e Subtração ➕➖",
+    q:"Em uma conta armada, por que devemos alinhar os números corretamente?",
+    helper:"Pense em unidade, dezena, centena e milhar.",
+    options:["Para ficar bonito apenas","Para somar unidade com unidade, dezena com dezena etc.","Para transformar tudo em multiplicação","Não precisa alinhar"],
+    answer:1,
+    explanation:"Alinhar corretamente evita erros: unidades ficam embaixo de unidades, dezenas embaixo de dezenas, centenas embaixo de centenas."
+  },
+  {
+    type:"choice",
+    topic:"5. Partes da Operação 🧩",
+    q:"Na conta 48 + 37 = 85, o número 85 é chamado de:",
+    helper:"É o resultado de uma adição.",
+    options:["Minuendo","Diferença","Soma ou total","Subtraendo"],
+    answer:2,
+    explanation:"Em uma adição, o resultado é chamado de soma ou total."
+  },
+  {
+    type:"choice",
+    topic:"5. Partes da Operação 🧩",
+    q:"Na conta 90 - 25 = 65, o número 65 é chamado de:",
+    helper:"É o resultado de uma subtração.",
+    options:["Diferença","Parcela","Soma","Ângulo"],
+    answer:0,
+    explanation:"Em uma subtração, o resultado é chamado de diferença."
+  },
+  {
+    type:"choice",
+    topic:"6. Operações Inversas 🔄",
+    q:"Qual conta ajuda a conferir se 73 - 28 = 45 está correta?",
+    helper:"A operação inversa da subtração é a adição.",
+    options:["45 + 28 = 73","73 + 28 = 101","45 - 28 = 17","73 - 45 = 18"],
+    answer:0,
+    explanation:"Para conferir uma subtração, somamos a diferença com o subtraendo: 45 + 28 = 73. Então a conta está correta."
+  },
+  {
+    type:"choice",
+    topic:"6. Operações Inversas 🔄",
+    q:"Se 36 + 19 = 55, qual subtração relacionada está correta?",
+    helper:"Adição e subtração são operações inversas.",
+    options:["55 - 19 = 36","36 - 19 = 55","19 - 55 = 36","55 + 36 = 19"],
+    answer:0,
+    explanation:"Se 36 + 19 = 55, então 55 - 19 = 36 e também 55 - 36 = 19."
+  },
+  {
+    type:"choice",
+    topic:"7. Resolução de Problemas 🕵️",
+    q:"Um ônibus tinha 34 pessoas. Desceram 9. Quantas pessoas ficaram?",
+    helper:"Se pessoas desceram, a quantidade diminui.",
+    options:["25","34","43","29"],
+    answer:0,
+    explanation:"Como desceram 9 pessoas, fazemos 34 - 9 = 25. Ficaram 25 pessoas no ônibus."
+  },
+  {
+    type:"choice",
+    topic:"7. Resolução de Problemas 🕵️",
+    q:"Ana tinha R$ 120 e gastou R$ 45. Depois ganhou R$ 30. Com quanto ela ficou?",
+    helper:"Faça em duas etapas: primeiro tira, depois junta.",
+    options:["R$ 75","R$ 95","R$ 105","R$ 115"],
+    answer:2,
+    explanation:"Primeiro: 120 - 45 = 75. Depois: 75 + 30 = 105. Ana ficou com R$ 105."
+  },
+  {
+    type:"match",
+    topic:"Desafio Final 🏆",
+    q:"Combine cada conceito com a explicação correta.",
+    helper:"Sem arrastar! Toque e escolha. Funciona bem em celular e tablet.",
+    pairs:[
+      {term:"Polígono",answer:"Figura fechada com linhas retas"},
+      {term:"Ângulo reto",answer:"Mede 90 graus"},
+      {term:"Adição",answer:"Juntar quantidades"},
+      {term:"Subtração",answer:"Tirar uma quantidade"},
+      {term:"Troco",answer:"Dinheiro que sobra depois de pagar"}
+    ],
+    choices:["Figura fechada com linhas retas","Mede 90 graus","Juntar quantidades","Tirar uma quantidade","Dinheiro que sobra depois de pagar"],
+    explanation:"Mandou bem! Polígono é figura fechada com linhas retas; ângulo reto mede 90°; adição junta; subtração tira; troco é o dinheiro que sobra."
+  }
+];
+
+let current=0,score=0,answered=false;
+const quizCard=document.getElementById("quizCard");
+const questionCounter=document.getElementById("questionCounter");
+const scoreCounter=document.getElementById("scoreCounter");
+const barFill=document.getElementById("barFill");
+
+function visualHTML(type){
+  if(type==="shapes1"){
+    return `<div class="visual">
+      <div class="shape-card"><div class="shape">⭕</div>Círculo</div>
+      <div class="shape-card"><div class="shape">🔺</div>Triângulo</div>
+      <div class="shape-card"><div class="shape">〰️</div>Curva</div>
+      <div class="shape-card"><div class="shape">🥚</div>Oval</div>
+    </div>`;
+  }
+  if(type==="money1"){
+    return `<div class="visual">
+      <div class="shape-card"><div class="money">💵</div>R$ 50</div>
+      <div class="shape-card"><div class="money">💵</div>R$ 20</div>
+      <div class="shape-card"><div class="money">🧮</div>Somar</div>
+    </div>`;
+  }
+  return "";
+}
+
+function updateTop(){
+  questionCounter.textContent=current<questions.length?`Questão ${current+1} de ${questions.length}`:"Resultado final";
+  scoreCounter.textContent=`Pontos: ${score}`;
+  barFill.style.width=`${(current/questions.length)*100}%`;
+}
+
+function renderQuestion(){
+  answered=false; updateTop();
+  const item=questions[current];
+  if(item.type==="choice"){
+    quizCard.innerHTML=`
+      <span class="topic">${item.topic}</span>
+      <div class="question">${item.q}</div>
+      <p class="helper">${item.helper}</p>
+      ${visualHTML(item.visual)}
+      <div class="tip-box">💡 Dica de estudo: leia devagar, procure a palavra-chave e pense qual operação ou conceito combina com a situação.</div>
+      <div class="options">
+        ${item.options.map((op,i)=>`<button class="option" type="button" onclick="chooseAnswer(${i})">${op}</button>`).join("")}
+      </div>
+      <div id="feedback" class="feedback"></div>
+      <button id="nextBtn" class="next-btn" type="button" onclick="nextQuestion()" disabled>Próxima questão ➜</button>
+    `;
+  } else {
+    quizCard.innerHTML=`
+      <span class="topic">${item.topic}</span>
+      <div class="question">${item.q}</div>
+      <p class="helper">${item.helper}</p>
+      <div class="mini-game">
+        ${item.pairs.map((p,i)=>`
+          <div class="match-row">
+            <div class="match-term">${p.term}</div>
+            <select id="match-${i}">
+              <option value="">Toque aqui e escolha...</option>
+              ${item.choices.map(c=>`<option value="${c}">${c}</option>`).join("")}
+            </select>
+          </div>
+        `).join("")}
+      </div>
+      <button class="check-btn" type="button" onclick="checkMatch()">Conferir desafio ⭐</button>
+      <div id="feedback" class="feedback"></div>
+      <button id="nextBtn" class="next-btn" type="button" onclick="nextQuestion()" disabled>Ver resultado final 🏁</button>
+    `;
+  }
+}
+
+function chooseAnswer(index){
+  if(answered) return;
+  answered=true;
+  const item=questions[current];
+  const buttons=document.querySelectorAll(".option");
+  const feedback=document.getElementById("feedback");
+  const nextBtn=document.getElementById("nextBtn");
+
+  buttons.forEach((btn,i)=>{
+    btn.disabled=true;
+    if(i===item.answer) btn.classList.add("correct");
+    if(i===index && i!==item.answer) btn.classList.add("wrong");
+  });
+
+  if(index===item.answer){
+    score+=10;
+    feedback.className="feedback ok show";
+    feedback.innerHTML=`<div class="feedback-title">🎉 Acertou!</div>${item.explanation}`;
+  } else {
+    feedback.className="feedback no show";
+    feedback.innerHTML=`<div class="feedback-title">💡 Boa tentativa!</div>A resposta correta é: <strong>${item.options[item.answer]}</strong>.<br><br>${item.explanation}`;
+  }
+
+  scoreCounter.textContent=`Pontos: ${score}`;
+  nextBtn.disabled=false;
+}
+
+function checkMatch(){
+  if(answered) return;
+  answered=true;
+  const item=questions[current];
+  let correct=0;
+
+  item.pairs.forEach((p,i)=>{
+    if(document.getElementById(`match-${i}`).value===p.answer) correct++;
+  });
+
+  const feedback=document.getElementById("feedback");
+  const nextBtn=document.getElementById("nextBtn");
+
+  if(correct===item.pairs.length){
+    score+=25;
+    feedback.className="feedback ok show";
+    feedback.innerHTML=`<div class="feedback-title">🏆 Perfeito!</div>${item.explanation}`;
+  } else {
+    score+=correct*4;
+    feedback.className="feedback no show";
+    feedback.innerHTML=`<div class="feedback-title">💡 Você acertou ${correct} de ${item.pairs.length}.</div>
+    Revisão rápida:<br>
+    <strong>Polígono:</strong> figura fechada com linhas retas.<br>
+    <strong>Ângulo reto:</strong> mede 90 graus.<br>
+    <strong>Adição:</strong> juntar quantidades.<br>
+    <strong>Subtração:</strong> tirar uma quantidade.<br>
+    <strong>Troco:</strong> dinheiro que sobra depois de pagar.`;
+  }
+
+  scoreCounter.textContent=`Pontos: ${score}`;
+  nextBtn.disabled=false;
+  document.querySelectorAll("select").forEach(s=>s.disabled=true);
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=questions.length) showResult();
+  else {
+    renderQuestion();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+}
+
+function showResult(){
+  barFill.style.width="100%";
+  questionCounter.textContent="Resultado final";
+  const max=(questions.length-1)*10+25;
+  const percent=Math.round((score/max)*100);
+  let message="",stars="";
+  if(percent>=88){
+    message="Uau! Você revisou como um verdadeiro gênio da matemática!";
+    stars="⭐⭐⭐⭐⭐";
+  } else if(percent>=68){
+    message="Muito bom! Você já sabe bastante. Agora revise as explicações e jogue novamente.";
+    stars="⭐⭐⭐⭐";
+  } else {
+    message="Você está aprendendo! Refaça o quiz com calma. Cada tentativa melhora sua memória.";
+    stars="⭐⭐⭐";
+  }
+
+  quizCard.innerHTML=`
+    <div class="result-screen">
+      <h2>🎉 Fim do Quiz!</h2>
+      <div class="stars">${stars}</div>
+      <div class="score-big">${percent}%</div>
+      <p style="font-size:20px;font-weight:850;">${message}</p>
+      <div class="summary-box">
+        <h3>📚 Resumo para revisar antes da prova</h3>
+        <p><strong>Polígonos:</strong> figuras fechadas feitas com linhas retas. Triângulo tem 3 lados, quadrilátero 4, pentágono 5 e hexágono 6.</p>
+        <p><strong>Ângulos:</strong> reto = 90°, agudo = menor que 90°, obtuso = maior que 90°.</p>
+        <p><strong>Dinheiro:</strong> para saber o total, somamos; para saber o troco, subtraímos.</p>
+        <p><strong>Adição:</strong> serve para juntar quantidades. O resultado é a soma ou total.</p>
+        <p><strong>Subtração:</strong> serve para tirar, comparar ou descobrir quanto falta. O resultado é a diferença.</p>
+        <p><strong>Operações inversas:</strong> a adição ajuda a conferir a subtração, e a subtração ajuda a conferir a adição.</p>
+        <p><strong>Problemas:</strong> leia, destaque os números, descubra se precisa juntar ou tirar e confira a resposta.</p>
+      </div>
+      <button class="restart-btn" type="button" onclick="restartQuiz()">Jogar de novo 🔁</button>
+    </div>`;
+}
+
+function restartQuiz(){
+  current=0; score=0; renderQuestion();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
