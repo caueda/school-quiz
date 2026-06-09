@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Quiz Divertido - Língua Portuguesa</title>
+<style>
+:root{--blue:#2563eb;--green:#16a34a;--red:#dc2626;--purple:#7c3aed;--pink:#ec4899;--orange:#f97316;--bg:#f8fafc;--text:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#e0f2fe,#fefce8 45%,#fdf2f8);color:var(--text);-webkit-tap-highlight-color:transparent}
+.app{width:min(960px,100%);margin:0 auto;padding:16px}
+header{background:white;border-radius:24px;padding:20px;box-shadow:0 12px 30px rgba(15,23,42,.12);text-align:center;border:3px solid #bae6fd}
+h1{margin:0;font-size:clamp(26px,7vw,48px);color:var(--blue);line-height:1.05}
+.subtitle{font-size:clamp(16px,4vw,21px);margin:10px 0 0;color:#475569}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.badge{padding:8px 12px;border-radius:999px;background:#eef2ff;color:#4338ca;font-weight:800;font-size:14px}
+.progress-card{margin-top:16px;background:white;padding:14px;border-radius:18px;box-shadow:0 8px 22px rgba(15,23,42,.08)}
+.progress-info{display:flex;justify-content:space-between;gap:10px;font-weight:900;margin-bottom:8px;font-size:15px}
+.bar{width:100%;height:16px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple));transition:width .35s ease}
+.card{margin-top:18px;background:white;border-radius:26px;padding:20px;box-shadow:0 14px 35px rgba(15,23,42,.12);border:3px solid #e0e7ff}
+.topic{display:inline-block;padding:7px 12px;border-radius:999px;font-size:14px;font-weight:900;color:white;background:var(--purple);margin-bottom:10px}
+.question{font-size:clamp(22px,5vw,31px);line-height:1.18;font-weight:950;margin:8px 0 16px}
+.helper{color:#64748b;font-size:16px;margin-top:-5px;margin-bottom:14px}
+.options{display:grid;gap:12px}
+button{font-family:inherit;font-size:18px;border:none;cursor:pointer;touch-action:manipulation}
+.option{width:100%;text-align:left;background:#f8fafc;border:3px solid #cbd5e1;border-radius:18px;padding:16px;font-weight:850;color:#1e293b;min-height:58px;transition:transform .08s ease,border-color .2s ease,background .2s ease}
+.option:active{transform:scale(.98)}
+.option.correct{border-color:#22c55e;background:#dcfce7}
+.option.wrong{border-color:#ef4444;background:#fee2e2}
+.option:disabled{cursor:default;opacity:1}
+.feedback{display:none;margin-top:16px;padding:16px;border-radius:18px;font-size:17px;line-height:1.45;font-weight:650}
+.feedback.show{display:block}.feedback.ok{background:#dcfce7;border:3px solid #22c55e}.feedback.no{background:#fee2e2;border:3px solid #ef4444}
+.feedback-title{font-size:22px;font-weight:950;margin-bottom:6px}
+.next-btn,.restart-btn{width:100%;margin-top:16px;padding:17px;border-radius:18px;color:white;font-weight:950;background:linear-gradient(90deg,var(--blue),var(--purple));box-shadow:0 8px 20px rgba(37,99,235,.25)}
+.next-btn:disabled{background:#94a3b8;box-shadow:none}
+.mini-game{display:grid;gap:12px}.match-row{background:#f8fafc;border:3px solid #cbd5e1;border-radius:18px;padding:14px}.match-term{font-weight:950;font-size:19px;margin-bottom:8px;color:#1d4ed8}
+select{width:100%;font-size:18px;padding:14px;border-radius:14px;border:2px solid #94a3b8;background:white}
+.check-btn{width:100%;padding:17px;border-radius:18px;color:white;font-weight:950;background:linear-gradient(90deg,var(--orange),var(--pink));margin-top:10px}
+.result-screen{text-align:center;padding:20px}.score-big{font-size:clamp(44px,13vw,82px);font-weight:1000;color:var(--green);margin:8px 0}
+.summary-box{text-align:left;background:#f8fafc;border:3px solid #cbd5e1;border-radius:20px;padding:16px;margin-top:16px;font-size:16px;line-height:1.45}.summary-box h3{margin-top:0;color:var(--blue)}
+.stars{font-size:34px;letter-spacing:4px}.footer-note{text-align:center;color:#64748b;font-size:13px;margin:20px 0}
+@media(max-width:520px){.app{padding:12px}.card{padding:16px;border-radius:22px}.option{font-size:17px;padding:15px}.progress-info{font-size:14px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header>
+<h1>🎮 Quiz de Língua Portuguesa</h1>
+<p class="subtitle">Toque nas respostas, aprenda com as explicações e prepare-se para a prova!</p>
+<div class="badge-row"><span class="badge">📱 iPhone e Android</span><span class="badge">🧠 Educativo</span><span class="badge">⭐ Divertido</span></div>
+</header>
+<section class="progress-card"><div class="progress-info"><span id="questionCounter">Questão 1</span><span id="scoreCounter">Pontos: 0</span></div><div class="bar"><div class="bar-fill" id="barFill"></div></div></section>
+<section class="card" id="quizCard"></section>
+<p class="footer-note">Conteúdo: encontros vocálicos, rádio e TV, entrevista, concordância verbal, HQ e marca registrada.</p>
+</main>
+<script>
+const questions=[
+{type:"choice",topic:"1. Encontros Vocálicos",q:"O que é um encontro vocálico?",helper:"Pense no que acontece quando vogais aparecem na mesma palavra.",options:["É o encontro de duas consoantes na mesma palavra.","É o encontro de vogais na mesma palavra.","É quando uma palavra termina com ponto final.","É quando a palavra tem somente uma sílaba."],answer:1,explanation:"Encontro vocálico acontece quando vogais aparecem juntas ou próximas na mesma palavra, como em pai, céu, Paraguai e saída."},
+{type:"choice",topic:"1. Encontros Vocálicos",q:"Na palavra “pai”, temos qual encontro vocálico?",helper:"Na imagem, “pai” aparece como exemplo de duas vogais na mesma sílaba.",options:["Ditongo","Tritongo","Hiato","Onomatopeia"],answer:0,explanation:"“Pai” tem ditongo, porque há duas vogais na mesma sílaba."},
+{type:"choice",topic:"1. Encontros Vocálicos",q:"Na palavra “Paraguai”, o encontro “uai” é exemplo de:",helper:"Três vogais na mesma sílaba formam um nome especial.",options:["Hiato","Ditongo","Tritongo","Balão de fala"],answer:2,explanation:"“Uai” em Paraguai é tritongo, porque são três vogais pronunciadas na mesma sílaba."},
+{type:"choice",topic:"1. Encontros Vocálicos",q:"Em “saída”, o encontro “a-í” é:",helper:"As vogais ficam em sílabas diferentes.",options:["Ditongo","Hiato","Tritongo","Concordância"],answer:1,explanation:"É hiato, porque as vogais ficam separadas em sílabas diferentes: sa-í-da."},
+{type:"choice",topic:"2. Jornalismo: Rádio e TV",q:"Quem apresenta o programa e as notícias?",helper:"Na imagem, essa pessoa aparece ligada ao programa.",options:["Repórter","Cameraman","Apresentador","Entrevistado"],answer:2,explanation:"O apresentador apresenta o programa e as notícias. Ele conduz a comunicação com o público."},
+{type:"choice",topic:"2. Jornalismo: Rádio e TV",q:"Qual profissional vai aos lugares, entrevista e traz informações?",helper:"Ele costuma estar no local da notícia.",options:["Repórter","Cameraman","Leitor","Narrador"],answer:0,explanation:"O repórter busca informações, entrevista pessoas e traz notícias para o público."},
+{type:"choice",topic:"2. Jornalismo: Rádio e TV",q:"A TV informa usando:",helper:"Compare rádio e TV.",options:["Apenas som","Imagem e som","Apenas texto escrito","Somente balões"],answer:1,explanation:"A TV usa imagem e som. Já o rádio usa apenas som para informar."},
+{type:"choice",topic:"3. A Entrevista",q:"O que é uma entrevista?",helper:"Pense em repórter, pergunta e resposta.",options:["Um gênero jornalístico em que o repórter faz perguntas e o entrevistado responde.","Uma história em quadrinhos sem falas.","Um símbolo que identifica uma marca.","Uma palavra que imita ruídos."],answer:0,explanation:"A entrevista é um gênero jornalístico com perguntas feitas pelo repórter e respostas dadas pelo entrevistado."},
+{type:"choice",topic:"3. A Entrevista",q:"Em uma entrevista, a pergunta é feita por quem?",helper:"Na imagem, o repórter segura o microfone.",options:["Pelo entrevistado","Pelo repórter","Pelo leitor","Pelo cameraman"],answer:1,explanation:"A pergunta é feita pelo repórter. O entrevistado responde à pergunta."},
+{type:"choice",topic:"4. Concordância Verbal",q:"Qual frase está correta?",helper:"O verbo precisa concordar com o sujeito.",options:["Eles brinca com os balões.","Ele brincam com o balão.","Eles brincam com os balões.","Nós brinca no parque."],answer:2,explanation:"“Eles” está no plural, então o verbo também vai para o plural: eles brincam."},
+{type:"choice",topic:"4. Concordância Verbal",q:"Complete: “Ela _____ com o balão.”",helper:"Ela = singular.",options:["brincam","brinca","brincamos","brincar"],answer:1,explanation:"“Ela” é singular, então usamos o verbo no singular: Ela brinca com o balão."},
+{type:"choice",topic:"5. Gênero HQ",q:"HQ significa:",helper:"É uma história contada em quadrinhos.",options:["História em Quadrinhos","História Qualquer","Hora da Questão","Hiato Quadrado"],answer:0,explanation:"HQ significa História em Quadrinhos. Ela usa sequência de quadrinhos para contar uma história."},
+{type:"choice",topic:"5. Gênero HQ",q:"Qual é a ordem de leitura mais comum nas HQs?",helper:"A imagem mostra setas indicando a direção.",options:["Da direita para a esquerda e de baixo para cima.","Da esquerda para a direita e de cima para baixo.","Somente de baixo para cima.","Não existe ordem."],answer:1,explanation:"Em português, normalmente lemos HQs da esquerda para a direita e de cima para baixo."},
+{type:"choice",topic:"6. Elementos das HQs",q:"O balão de fala indica que o personagem está:",helper:"Balão de fala mostra o que foi dito.",options:["Pensando","Falando","Dormindo","Narrando o tempo"],answer:1,explanation:"O balão de fala indica que o personagem está falando."},
+{type:"choice",topic:"6. Elementos das HQs",q:"Palavras como “BOOM!”, “TRIMMM!” e “POF!” são:",helper:"São palavras que imitam sons.",options:["Onomatopeias","Tritongos","Entrevistas","Marcas registradas"],answer:0,explanation:"Onomatopeias são palavras que imitam sons ou ruídos, como BOOM!, TRIMMM! e POF!"},
+{type:"choice",topic:"7. Marca Registrada",q:"O símbolo ® serve para indicar:",helper:"Ele aparece perto de nomes ou logos de marcas.",options:["Que uma marca é registrada e pertence a alguém.","Que a palavra tem três vogais.","Que o personagem está pensando.","Que a notícia é de rádio."],answer:0,explanation:"O símbolo ® indica marca registrada. Ele mostra que aquela marca é única e pertence a alguém."},
+{type:"match",topic:"Desafio Final",q:"Combine cada termo com sua explicação.",helper:"Sem arrastar! É só tocar e escolher a opção. Funciona bem no celular.",pairs:[{term:"Ditongo",answer:"2 vogais na mesma sílaba"},{term:"Hiato",answer:"Vogais separadas em sílabas diferentes"},{term:"Rádio",answer:"Usa apenas som para informar"},{term:"Caixa do narrador",answer:"Texto que narra ou explica a história"}],choices:["2 vogais na mesma sílaba","Vogais separadas em sílabas diferentes","Usa apenas som para informar","Texto que narra ou explica a história"],explanation:"Muito bem! Ditongo tem 2 vogais na mesma sílaba; hiato separa as vogais; rádio usa som; caixa do narrador explica ou narra a história."}
+];
+let current=0,score=0,answered=false;
+const quizCard=document.getElementById("quizCard"),questionCounter=document.getElementById("questionCounter"),scoreCounter=document.getElementById("scoreCounter"),barFill=document.getElementById("barFill");
+function updateTop(){questionCounter.textContent=current<questions.length?`Questão ${current+1} de ${questions.length}`:"Resultado final";scoreCounter.textContent=`Pontos: ${score}`;barFill.style.width=`${(current/questions.length)*100}%`}
+function renderQuestion(){answered=false;updateTop();const item=questions[current];if(item.type==="choice"){quizCard.innerHTML=`<span class="topic">${item.topic}</span><div class="question">${item.q}</div><p class="helper">${item.helper}</p><div class="options">${item.options.map((op,i)=>`<button class="option" type="button" onclick="chooseAnswer(${i})">${op}</button>`).join("")}</div><div id="feedback" class="feedback"></div><button id="nextBtn" class="next-btn" type="button" onclick="nextQuestion()" disabled>Próxima questão ➜</button>`}else{quizCard.innerHTML=`<span class="topic">${item.topic}</span><div class="question">${item.q}</div><p class="helper">${item.helper}</p><div class="mini-game">${item.pairs.map((p,i)=>`<div class="match-row"><div class="match-term">${p.term}</div><select id="match-${i}"><option value="">Toque aqui e escolha...</option>${item.choices.map(c=>`<option value="${c}">${c}</option>`).join("")}</select></div>`).join("")}</div><button class="check-btn" type="button" onclick="checkMatch()">Conferir respostas ⭐</button><div id="feedback" class="feedback"></div><button id="nextBtn" class="next-btn" type="button" onclick="nextQuestion()" disabled>Ver resultado final 🏆</button>`}}
+function chooseAnswer(index){if(answered)return;answered=true;const item=questions[current],buttons=document.querySelectorAll(".option"),feedback=document.getElementById("feedback"),nextBtn=document.getElementById("nextBtn");buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.answer)btn.classList.add("correct");if(i===index&&i!==item.answer)btn.classList.add("wrong")});if(index===item.answer){score+=10;feedback.className="feedback ok show";feedback.innerHTML=`<div class="feedback-title">🎉 Acertou!</div>${item.explanation}`}else{feedback.className="feedback no show";feedback.innerHTML=`<div class="feedback-title">💡 Quase!</div>A resposta correta é: <strong>${item.options[item.answer]}</strong>.<br><br>${item.explanation}`}scoreCounter.textContent=`Pontos: ${score}`;nextBtn.disabled=false}
+function checkMatch(){if(answered)return;const item=questions[current];let correct=0;item.pairs.forEach((p,i)=>{if(document.getElementById(`match-${i}`).value===p.answer)correct++});const feedback=document.getElementById("feedback"),nextBtn=document.getElementById("nextBtn");answered=true;if(correct===item.pairs.length){score+=20;feedback.className="feedback ok show";feedback.innerHTML=`<div class="feedback-title">🏆 Perfeito!</div>${item.explanation}`}else{score+=correct*3;feedback.className="feedback no show";feedback.innerHTML=`<div class="feedback-title">💡 Você acertou ${correct} de ${item.pairs.length}.</div><strong>Ditongo</strong>: 2 vogais na mesma sílaba.<br><strong>Hiato</strong>: vogais separadas em sílabas diferentes.<br><strong>Rádio</strong>: usa apenas som para informar.<br><strong>Caixa do narrador</strong>: texto que narra ou explica a história.`}scoreCounter.textContent=`Pontos: ${score}`;nextBtn.disabled=false;document.querySelectorAll("select").forEach(s=>s.disabled=true)}
+function nextQuestion(){current++;if(current>=questions.length)showResult();else{renderQuestion();window.scrollTo({top:0,behavior:"smooth"})}}
+function showResult(){barFill.style.width="100%";questionCounter.textContent="Resultado final";const max=(questions.length-1)*10+20,percent=Math.round((score/max)*100);let message="",stars="";if(percent>=85){message="Excelente! Você estudou com muita atenção. Continue revisando para chegar confiante na prova!";stars="⭐⭐⭐⭐⭐"}else if(percent>=65){message="Muito bom! Você já sabe bastante. Revise os pontos em que errou e tente novamente.";stars="⭐⭐⭐⭐"}else{message="Você está aprendendo! Refaça o quiz com calma e leia as explicações. Cada tentativa ajuda a memorizar.";stars="⭐⭐⭐"}quizCard.innerHTML=`<div class="result-screen"><h2>🎉 Fim do Quiz!</h2><div class="stars">${stars}</div><div class="score-big">${percent}%</div><p style="font-size:20px;font-weight:800;">${message}</p><div class="summary-box"><h3>📚 Resumo para revisar antes da prova</h3><p><strong>Encontros vocálicos:</strong> ditongo = 2 vogais na mesma sílaba; tritongo = 3 vogais na mesma sílaba; hiato = vogais em sílabas diferentes.</p><p><strong>Jornalismo:</strong> apresentador apresenta; repórter entrevista e traz informações; cameraman registra imagens; TV usa imagem e som; rádio usa som.</p><p><strong>Entrevista:</strong> tem título, apresentação, perguntas e respostas.</p><p><strong>Concordância verbal:</strong> o verbo concorda com o sujeito. Ex.: ele brinca / eles brincam.</p><p><strong>HQ:</strong> sequência de quadrinhos com texto e imagem; leitura da esquerda para a direita e de cima para baixo.</p><p><strong>Elementos das HQs:</strong> balão de fala, balão de pensamento, onomatopeia, caixa do narrador e expressões dos personagens.</p><p><strong>Marca registrada:</strong> o símbolo ® mostra que a marca é registrada.</p></div><button class="restart-btn" type="button" onclick="restartQuiz()">Jogar de novo 🔁</button></div>`}
+function restartQuiz(){current=0;score=0;renderQuestion();window.scrollTo({top:0,behavior:"smooth"})}
+renderQuestion();
+</script>
+</body>
+</html>
