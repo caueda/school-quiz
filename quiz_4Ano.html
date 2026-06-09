@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Divertido - Guia de Estudos 4º Ano</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #fef3c7, #fce7f3);
+      color: #1f2937;
+      min-height: 100vh;
+    }
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .hero {
+      background: #ffffffee;
+      border-radius: 28px;
+      padding: 22px;
+      margin: 16px 0;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      text-align: center;
+      border: 4px solid #60a5fa;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 5vw, 3rem);
+      color: #2563eb;
+    }
+    .subtitle {
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+    .card {
+      background: #fff;
+      border-radius: 26px;
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      border: 3px solid #fbbf24;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .pill {
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .95rem;
+    }
+    .progress {
+      width: 100%;
+      height: 18px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 18px;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #3b82f6);
+      transition: width .35s ease;
+    }
+    .question-title {
+      color: #db2777;
+      font-size: clamp(1.2rem, 4vw, 1.6rem);
+      margin: 5px 0;
+    }
+    .question {
+      font-size: clamp(1.15rem, 4vw, 1.55rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 16px 0;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    button {
+      font: inherit;
+    }
+    .option {
+      width: 100%;
+      border: 3px solid #93c5fd;
+      background: #eff6ff;
+      border-radius: 18px;
+      padding: 16px;
+      text-align: left;
+      font-size: clamp(1rem, 3.8vw, 1.2rem);
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 58px;
+      transition: transform .1s ease, background .2s ease, border .2s ease;
+      touch-action: manipulation;
+    }
+    .option:active { transform: scale(.98); }
+    .option.correct {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+    .option.wrong {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+    .feedback {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 18px;
+      font-size: clamp(1rem, 3.5vw, 1.15rem);
+      line-height: 1.4;
+      display: none;
+    }
+    .feedback.good {
+      display: block;
+      background: #dcfce7;
+      border: 3px solid #22c55e;
+    }
+    .feedback.bad {
+      display: block;
+      background: #fee2e2;
+      border: 3px solid #ef4444;
+    }
+    .next, .restart {
+      margin-top: 16px;
+      width: 100%;
+      border: 0;
+      border-radius: 20px;
+      padding: 16px;
+      background: linear-gradient(90deg, #2563eb, #db2777);
+      color: white;
+      font-size: 1.15rem;
+      font-weight: 900;
+      cursor: pointer;
+      min-height: 58px;
+    }
+    .next[disabled] {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+    .result {
+      display: none;
+      text-align: center;
+    }
+    .big {
+      font-size: clamp(2.5rem, 12vw, 5rem);
+      margin: 8px 0;
+    }
+    .tips {
+      background: #fefce8;
+      border: 3px dashed #f59e0b;
+      padding: 16px;
+      border-radius: 18px;
+      margin-top: 16px;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .mini {
+      font-size: .95rem;
+      color: #4b5563;
+      margin-top: 16px;
+      text-align: center;
+    }
+    @media (min-width: 720px) {
+      .options.two { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <h1>🚀 Quiz do Super Guia!</h1>
+      <p class="subtitle">
+        Responda às missões sobre boleto, conta de consumo, QR Code, carta de reclamação,
+        sílaba tônica e paroxítonas. Feito para celular, tablet e computador.
+      </p>
+    </section>
+
+    <section id="quiz" class="card">
+      <div class="topbar">
+        <span class="pill" id="counter">Pergunta 1</span>
+        <span class="pill" id="score">⭐ Pontos: 0</span>
+      </div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <h2 class="question-title" id="title"></h2>
+      <div class="question" id="question"></div>
+      <div class="options two" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next" id="next" disabled>Próxima missão ➜</button>
+    </section>
+
+    <section id="result" class="card result">
+      <div class="big">🏆</div>
+      <h2 id="resultTitle">Resultado</h2>
+      <p id="resultText"></p>
+      <div class="tips">
+        <strong>Revisão rápida:</strong>
+        <br>📄 Boleto: confira banco, fornecedor, cliente, valor e vencimento.
+        <br>💧 Conta de consumo: luz, água e telefone.
+        <br>📱 QR Code: código quadrado lido pela câmera.
+        <br>✉️ Carta de reclamação: apresenta o problema e pede solução.
+        <br>🔊 Sílaba tônica: é a sílaba mais forte da palavra.
+      </div>
+      <button class="restart" onclick="restartQuiz()">Jogar novamente 🔁</button>
+    </section>
+
+    <p class="mini">Dica: leia com calma. Ao errar, o jogo explica a resposta correta na hora.</p>
+  </main>
+
+<script>
+const questions = [{"type": "mc", "title": "Missão 1: Detetive do boleto", "question": "Em um boleto, o que é MAIS importante conferir para evitar cair em golpe?", "options": ["A cor do papel e o tamanho da letra", "Nome do banco, dados do fornecedor, valor e dados do cliente", "Se tem uma figura bonita no canto", "Se o boleto foi impresso em folha colorida"], "answer": 1, "explanation": "Isso mesmo! Para evitar golpes, devemos conferir o banco, fornecedor, valor e dados do cliente."}, {"type": "mc", "title": "Missão 2: Conta de consumo", "question": "Qual destes exemplos é uma conta de consumo?", "options": ["Conta de luz", "Carta de aniversário", "Bilhete de cinema", "Capa de caderno"], "answer": 0, "explanation": "Conta de luz é uma conta de consumo, assim como água e telefone."}, {"type": "mc", "title": "Missão 3: Código misterioso", "question": "Qual código quadrado pode ser lido pela câmera do celular?", "options": ["Código de Barras", "QR Code", "CEP", "CPF"], "answer": 1, "explanation": "O QR Code é quadrado e pode abrir sites, cardápios e pagamentos pelo celular."}, {"type": "mc", "title": "Missão 4: Atrasou, e agora?", "question": "Se um boleto for pago depois da data de vencimento, o que pode acontecer?", "options": ["O valor sempre diminui", "Pode haver multa e juros", "Ele vira uma carta", "O banco apaga o boleto"], "answer": 1, "explanation": "Quando pagamos atrasado, o boleto pode cobrar multa e juros."}, {"type": "mc", "title": "Missão 5: Quem escreveu?", "question": "Na carta de reclamação, quem é o remetente?", "options": ["Quem recebe a carta", "Quem escreve e envia a carta", "O carteiro", "O produto com defeito"], "answer": 1, "explanation": "Remetente é quem escreve e envia a carta."}, {"type": "mc", "title": "Missão 6: Para quem vai?", "question": "Na carta de reclamação, quem é o destinatário?", "options": ["Quem recebe a carta", "Quem vende pipoca", "Quem desenha o envelope", "Quem paga o boleto"], "answer": 0, "explanation": "Destinatário é quem recebe a carta, como uma empresa ou pessoa."}, {"type": "mc", "title": "Missão 7: Monte a carta", "question": "Qual parte da carta apresenta o problema e pede uma solução?", "options": ["Data e local", "Saudação", "Corpo da mensagem", "Assinatura"], "answer": 2, "explanation": "No corpo da mensagem, a pessoa conta o problema e pede uma solução."}, {"type": "mc", "title": "Missão 8: Carta digital", "question": "O e-mail pode ser entendido como:", "options": ["Uma carta eletrônica enviada pela internet", "Uma conta de água", "Um tipo de brinquedo", "Um código de barras"], "answer": 0, "explanation": "E-mail é como uma carta eletrônica, só que muito mais rápida."}, {"type": "mc", "title": "Missão 9: Sílaba poderosa", "question": "Na palavra 'ca-fé', qual é a sílaba tônica?", "options": ["ca", "fé", "as duas", "nenhuma"], "answer": 1, "explanation": "Em 'café', a sílaba mais forte é 'fé'. Como é a última, é oxítona."}, {"type": "mc", "title": "Missão 10: Paroxítona", "question": "Qual palavra tem a sílaba tônica na penúltima sílaba?", "options": ["ca-fé", "lâm-pa-da", "ca-dei-ra", "ja-ca-ré"], "answer": 2, "explanation": "'Cadeira' tem som forte em 'dei': ca-DEI-ra. É paroxítona."}, {"type": "mc", "title": "Missão 11: Proparoxítona", "question": "Qual palavra é proparoxítona?", "options": ["médico", "papel", "valor", "boleto"], "answer": 0, "explanation": "'Médico' tem a sílaba forte na antepenúltima: MÉ-di-co. Toda proparoxítona é acentuada."}, {"type": "mc", "title": "Missão 12: Paroxítona acentuada", "question": "Qual palavra paroxítona deve receber acento por terminar em L?", "options": ["facil", "casa", "menino", "janela"], "answer": 0, "explanation": "A forma correta é 'fácil'. Paroxítonas terminadas em L recebem acento."}, {"type": "mc", "title": "Missão 13: Olho no documento", "question": "Qual informação pertence aos dados de pagamento de um boleto?", "options": ["Nome do animal de estimação", "Data de vencimento e valor", "Cor favorita do cliente", "Nome do professor"], "answer": 1, "explanation": "Dados de pagamento incluem data de vencimento e valor do documento."}, {"type": "mc", "title": "Missão 14: Reclamação educada", "question": "Qual frase combina melhor com uma carta pessoal de reclamação?", "options": ["Quero reclamar de um produto que veio quebrado e pedir a troca.", "Era uma vez um dragão que morava no boleto.", "Comprei pão na padaria ontem.", "Azul é minha cor preferida."], "answer": 0, "explanation": "Uma carta de reclamação explica o problema e pede uma solução."}, {"type": "mc", "title": "Missão 15: Terminação especial", "question": "Qual destas palavras é uma paroxítona acentuada terminada em R?", "options": ["repórter", "caderno", "mesa", "sapo"], "answer": 0, "explanation": "'Repórter' é paroxítona e recebe acento por terminar em R."}, {"type": "tf", "title": "Missão 16: Verdadeiro ou falso", "question": "O QR Code pode ajudar a economizar papel, porque muitos documentos e cardápios podem ser acessados pelo celular.", "answer": true, "explanation": "Verdadeiro! Usar QR Code pode ser mais rápido e reduzir o uso de papel."}, {"type": "tf", "title": "Missão 17: Verdadeiro ou falso", "question": "A carta pessoal de reclamação pode ser publicada por qualquer pessoa sem autorização.", "answer": false, "explanation": "Falso! Ela é pessoal e privada. Deve respeitar o sigilo e a privacidade."}, {"type": "mc", "title": "Missão 18: Desafio final", "question": "Na palavra 'aquário', o acento aparece porque ela é paroxítona terminada em:", "options": ["consoante M", "ditongo", "vogal A", "letra Z"], "answer": 1, "explanation": "'Aquário' é paroxítona terminada em ditongo, por isso recebe acento."}];
+let current = 0;
+let score = 0;
+let answered = false;
+
+const titleEl = document.getElementById('title');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const feedbackEl = document.getElementById('feedback');
+const nextBtn = document.getElementById('next');
+const counterEl = document.getElementById('counter');
+const scoreEl = document.getElementById('score');
+const barEl = document.getElementById('bar');
+const quizEl = document.getElementById('quiz');
+const resultEl = document.getElementById('result');
+
+function renderQuestion() {
+  answered = false;
+  nextBtn.disabled = true;
+  feedbackEl.className = 'feedback';
+  feedbackEl.innerHTML = '';
+  optionsEl.innerHTML = '';
+
+  const q = questions[current];
+  titleEl.textContent = q.title;
+  questionEl.textContent = q.question;
+  counterEl.textContent = `Pergunta ${current + 1} de ${questions.length}`;
+  scoreEl.textContent = `⭐ Pontos: ${score}`;
+  barEl.style.width = `${(current / questions.length) * 100}%`;
+
+  if (q.type === 'mc') {
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.textContent = opt;
+      btn.onclick = () => chooseAnswer(idx, btn);
+      optionsEl.appendChild(btn);
+    });
+  } else {
+    [
+      {label: '✅ Verdadeiro', value: true},
+      {label: '❌ Falso', value: false}
+    ].forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.textContent = item.label;
+      btn.onclick = () => chooseAnswer(item.value, btn);
+      optionsEl.appendChild(btn);
+    });
+  }
+}
+
+function chooseAnswer(value, btn) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[current];
+  const correct = value === q.answer;
+  const buttons = [...document.querySelectorAll('.option')];
+
+  buttons.forEach((b, i) => {
+    let isCorrect = q.type === 'mc' ? i === q.answer : 
+      (b.textContent.includes('Verdadeiro') && q.answer === true) || (b.textContent.includes('Falso') && q.answer === false);
+    if (isCorrect) b.classList.add('correct');
+  });
+
+  if (correct) {
+    score++;
+    feedbackEl.className = 'feedback good';
+    feedbackEl.innerHTML = '🎉 <strong>Acertou!</strong><br>' + q.explanation;
+  } else {
+    btn.classList.add('wrong');
+    feedbackEl.className = 'feedback bad';
+    feedbackEl.innerHTML = '💡 <strong>Quase!</strong><br>' + q.explanation;
+  }
+
+  scoreEl.textContent = `⭐ Pontos: ${score}`;
+  nextBtn.disabled = false;
+  if (current === questions.length - 1) nextBtn.textContent = 'Ver meu resultado 🏁';
+}
+
+nextBtn.addEventListener('click', () => {
+  current++;
+  if (current < questions.length) {
+    nextBtn.textContent = 'Próxima missão ➜';
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  quizEl.style.display = 'none';
+  resultEl.style.display = 'block';
+  barEl.style.width = '100%';
+  const percent = Math.round((score / questions.length) * 100);
+  document.getElementById('resultTitle').textContent = `Você fez ${score} de ${questions.length} pontos!`;
+  let msg = '';
+  if (percent >= 85) msg = 'Incrível! Você é um mestre dos documentos, cartas e sílabas tônicas! 🚀';
+  else if (percent >= 60) msg = 'Muito bom! Revise as dicas e tente bater sua pontuação! ⭐';
+  else msg = 'Você está aprendendo! Leia as explicações e jogue de novo para melhorar. 💪';
+  document.getElementById('resultText').textContent = msg;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  current = 0;
+  score = 0;
+  resultEl.style.display = 'none';
+  quizEl.style.display = 'block';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
