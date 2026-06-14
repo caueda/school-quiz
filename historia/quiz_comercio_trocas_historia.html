@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Divertido - Comércio e Trocas na História</title>
+  <style>
+    :root {
+      --bg: #fff7df;
+      --card: #ffffff;
+      --ink: #20304a;
+      --blue: #2477c3;
+      --green: #3fa34d;
+      --yellow: #ffd84d;
+      --orange: #ff9f1c;
+      --red: #e94f64;
+      --purple: #7b4cc2;
+      --shadow: 0 10px 25px rgba(0,0,0,.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+      background: radial-gradient(circle at top left, #fff1a8, transparent 30%),
+                  radial-gradient(circle at bottom right, #c8f7dc, transparent 35%),
+                  var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1050px; margin: 0 auto; padding: 18px; }
+    header {
+      background: linear-gradient(135deg, #2d8cff, #32c766);
+      color: white;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 3.2rem); text-shadow: 2px 3px 0 rgba(0,0,0,.15); }
+    header p { font-size: clamp(1rem, 2.5vw, 1.25rem); margin: 8px 0 0; }
+    .emojiRain { position:absolute; inset:0; pointer-events:none; opacity:.18; font-size:2rem; letter-spacing:18px; transform:rotate(-8deg); line-height:2; }
+    .panel {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 20px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+      border: 4px solid #11182710;
+    }
+    .startGrid { display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; align-items:center; }
+    .mascot {
+      background: #fff3bf;
+      border: 3px dashed #ffbd00;
+      border-radius: 20px;
+      padding: 14px;
+      font-size: 1.1rem;
+    }
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: 0 5px 0 rgba(0,0,0,.2);
+      transition: transform .08s, box-shadow .08s;
+      min-height: 48px;
+    }
+    .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,.2); }
+    .btnPrimary { background: var(--yellow); color: #2b2b2b; }
+    .btnBlue { background: var(--blue); color: white; }
+    .btnGreen { background: var(--green); color: white; }
+    .btnRed { background: var(--red); color: white; }
+    .controls { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px; }
+    .hidden { display:none !important; }
+    .topbar { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .badge {
+      background: #eef6ff;
+      border: 2px solid #b9ddff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
+    }
+    .progressOuter { height: 18px; background:#e8edf5; border-radius:999px; overflow:hidden; flex:1; min-width:180px; border:2px solid #d5ddec; }
+    .progressInner { height:100%; width:0%; background:linear-gradient(90deg, #3fa34d, #ffd84d, #ff9f1c); transition:width .3s; }
+    .questionCard { margin-top:16px; border-radius:22px; padding:18px; background:#fdfdff; border:3px solid #dfe8ff; }
+    .theme { color: var(--purple); font-weight:900; text-transform:uppercase; font-size:.9rem; letter-spacing:.5px; }
+    .qText { font-size: clamp(1.25rem, 4vw, 1.8rem); font-weight: 900; margin: 10px 0; }
+    .answers { display:grid; gap:12px; margin-top:14px; }
+    .answer {
+      background:#fff;
+      border:3px solid #d9e3f0;
+      border-radius:18px;
+      padding:14px;
+      text-align:left;
+      font-size:1.05rem;
+      cursor:pointer;
+      min-height:54px;
+      font-family: inherit;
+    }
+    .answer:hover { border-color:#60a5fa; background:#f0f8ff; }
+    .answer.correct { border-color:#22c55e; background:#dcfce7; }
+    .answer.wrong { border-color:#ef4444; background:#fee2e2; }
+    .feedback {
+      margin-top:14px;
+      padding:14px;
+      border-radius:18px;
+      font-size:1.05rem;
+      line-height:1.45;
+      background:#fff8d6;
+      border:3px solid #ffe082;
+    }
+    .bigEmoji { font-size:2.1rem; vertical-align:middle; }
+    .result {
+      text-align:center;
+      font-size:1.2rem;
+    }
+    .stars { font-size:2.5rem; margin:10px 0; }
+    .reviewList { text-align:left; display:grid; gap:10px; margin-top:14px; }
+    .reviewItem { background:#f8fafc; border-left:6px solid #60a5fa; padding:12px; border-radius:12px; }
+    .pillRow { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .pill { padding:7px 10px; border-radius:999px; background:#eef2ff; font-weight:800; font-size:.9rem; }
+    @media (max-width: 760px) {
+      .startGrid { grid-template-columns:1fr; }
+      .wrap { padding: 10px; }
+      .panel { padding: 14px; border-radius: 18px; }
+      header { padding: 18px 12px; border-radius: 18px; }
+      .btn { width:100%; }
+      .controls .btn { width:auto; flex:1; }
+      .topbar { align-items:stretch; }
+      .badge { text-align:center; }
+      .answer { font-size:1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="emojiRain">🏺 🐎 🚢 🧂 💰 🧭 🌍 🚂 ✈️ 🐫</div>
+      <h1>🧭 Quiz Aventura do Comércio!</h1>
+      <p>Trocas, cidades, transportes, especiarias, navegações e muito mais!</p>
+    </header>
+
+    <section id="start" class="panel">
+      <div class="startGrid">
+        <div>
+          <h2>Olá, explorador(a)! 👋</h2>
+          <p>Você vai viajar pela História para descobrir como as pessoas trocavam produtos, como surgiram as moedas, por que as especiarias eram tão valiosas e como o comércio ligou povos pelo mundo.</p>
+          <p><strong>Como funciona:</strong> a cada partida, o quiz sorteia perguntas diferentes. Quando errar, aparece uma explicação para aprender de verdade.</p>
+          <div class="pillRow">
+            <span class="pill">📱 Funciona no celular</span>
+            <span class="pill">💻 Funciona no computador</span>
+            <span class="pill">🎲 Perguntas variáveis</span>
+            <span class="pill">🧠 Explica os erros</span>
+          </div>
+        </div>
+        <div class="mascot">
+          <h3>Missão do Lucca ⭐</h3>
+          <p>Ganhe moedas históricas respondendo corretamente. No final, veja sua medalha de comerciante do tempo!</p>
+          <button class="btn btnPrimary" onclick="startQuiz()">Começar aventura 🚀</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz" class="panel hidden">
+      <div class="topbar">
+        <span class="badge" id="counter">Pergunta 1</span>
+        <div class="progressOuter"><div class="progressInner" id="progress"></div></div>
+        <span class="badge" id="score">Moedas: 0 🪙</span>
+      </div>
+      <div class="questionCard">
+        <div class="theme" id="theme"></div>
+        <div class="qText" id="question"></div>
+        <div id="answers" class="answers"></div>
+        <div id="feedback" class="feedback hidden"></div>
+        <div class="controls">
+          <button id="nextBtn" class="btn btnBlue hidden" onclick="nextQuestion()">Próxima ➡️</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="end" class="panel hidden result">
+      <h2>Fim da aventura! 🎉</h2>
+      <div class="stars" id="medal"></div>
+      <p id="finalText"></p>
+      <div class="controls">
+        <button class="btn btnGreen" onclick="startQuiz()">Jogar de novo com novas perguntas 🔁</button>
+        <button class="btn btnBlue" onclick="showReview()">Ver revisão dos erros 📚</button>
+      </div>
+      <div id="review" class="reviewList hidden"></div>
+    </section>
+  </div>
+
+  <script>
+    const bank = [
+      {t:"Primeiras cidades", q:"Por que a agricultura ajudou no surgimento das primeiras cidades?", a:["Porque as pessoas puderam se fixar em um lugar e produzir alimentos","Porque todos passaram a viajar mais rápido","Porque as moedas apareceram antes das plantações","Porque os aviões levaram sementes"], c:0, e:"Com a agricultura, as pessoas não precisavam mudar sempre de lugar para procurar comida. Elas passaram a plantar, criar animais e formar comunidades."},
+      {t:"Primeiras cidades", q:"O que é excedente de produção?", a:["O que sobra depois de atender às necessidades","Um tipo de moeda de ouro","Uma carroça usada no comércio","Uma especiaria rara"], c:0, e:"Excedente é a parte que sobra. Se uma família produzia mais trigo do que conseguia consumir, podia trocar o restante por outros produtos."},
+      {t:"Primeiras cidades", q:"Se uma aldeia produzia muito milho e outra tinha muitos potes de barro, o que poderia acontecer?", a:["Elas poderiam trocar milho por potes","Elas precisariam usar cartão de crédito","O milho viraria automaticamente moeda","As duas aldeias parariam de comerciar"], c:0, e:"Antes do dinheiro, era comum trocar produtos conforme a necessidade de cada grupo."},
+      {t:"Primeiras cidades", q:"Por que muitas cidades antigas tinham muralhas?", a:["Para se proteger de invasores","Para guardar aviões","Para impedir o crescimento das feiras","Para esconder especiarias do sol"], c:0, e:"As muralhas ajudavam a proteger moradores, alimentos, animais e riquezas."},
+      {t:"Primeiras cidades", q:"As feiras e mercados surgiram principalmente para:", a:["Facilitar encontros para trocas e vendas","Treinar navegadores","Guardar água dos rios","Construir muralhas"], c:0, e:"Feiras e mercados eram pontos onde pessoas se reuniam para trocar ou vender produtos."},
+
+      {t:"Escambo", q:"O que é escambo?", a:["Troca direta de produtos ou serviços sem dinheiro","Pagamento com cartão","Compra feita pela internet","Salário pago em moedas digitais"], c:0, e:"Escambo é trocar uma coisa por outra sem usar dinheiro. Exemplo: trocar peixe por um cesto."},
+      {t:"Escambo", q:"Qual é uma dificuldade do escambo?", a:["As duas pessoas precisam querer o que a outra oferece","Não permite trocar alimentos","Só funciona com moedas","Só existiu nos dias atuais"], c:0, e:"Para o escambo funcionar bem, cada lado precisa se interessar pelo produto do outro."},
+      {t:"Escambo", q:"Ana tem ovos e precisa de tecido. Beto tem tecido, mas não quer ovos. Qual é o problema?", a:["Falta coincidência de interesses","Os ovos não têm valor algum","O tecido não pode ser trocado","Eles precisam de um trem"], c:0, e:"No escambo, a troca fica difícil quando a outra pessoa não quer aquilo que você oferece."},
+      {t:"Escambo", q:"Qual exemplo representa escambo?", a:["Trocar uma cesta de frutas por uma ferramenta","Pagar com PIX","Comprar com cartão","Receber salário no banco"], c:0, e:"Trocar diretamente um produto por outro é escambo."},
+      {t:"Escambo", q:"O escambo aconteceu apenas entre indígenas e portugueses?", a:["Não. Muitos povos usaram escambo em épocas diferentes","Sim. Só aconteceu no Brasil","Sim. Só aconteceu em navios","Não. Mas só com criptomoedas"], c:0, e:"O escambo é uma prática muito antiga e apareceu em diversos povos e regiões do mundo."},
+
+      {t:"Valor dos produtos", q:"Por que o sal era muito valioso no passado?", a:["Ajudava a conservar alimentos e era útil no dia a dia","Era usado para fazer aviões","Só existia na Rota da Seda","Era produzido por cartões"], c:0, e:"O sal era importante para conservar alimentos antes da geladeira e por isso tinha grande valor."},
+      {t:"Valor dos produtos", q:"A palavra salário tem relação histórica com:", a:["Sal","Seda","Avião","Bitcoin"], c:0, e:"A palavra salário vem da importância do sal em pagamentos antigos."},
+      {t:"Valor dos produtos", q:"Por que metais preciosos passaram a ser usados nas trocas?", a:["Eram valorizados, duráveis e mais fáceis de transportar que muitos produtos","Estragavam rapidamente","Eram sempre gratuitos","Serviam apenas para pintar casas"], c:0, e:"Ouro, prata e cobre eram duráveis, reconhecidos como valiosos e facilitavam trocas."},
+      {t:"Valor dos produtos", q:"Um produto tende a ser mais valorizado quando:", a:["É útil, raro ou muito desejado","Existe em excesso e ninguém quer","Não pode ser transportado","Não tem nenhuma utilidade"], c:0, e:"Valor tem relação com utilidade, raridade, desejo e dificuldade de obter o produto."},
+      {t:"Valor dos produtos", q:"Antes da geladeira, qual produto poderia ajudar a conservar carnes?", a:["Sal","Papel","Algodão","Vidro"], c:0, e:"O sal ajudava a conservar carnes e outros alimentos, reduzindo a deterioração."},
+
+      {t:"Formas de pagamento", q:"Qual sequência mostra uma evolução comum das formas de pagamento?", a:["Escambo, metais/moedas, cédulas, cartões, pagamentos eletrônicos","Cartões, escambo, navios, muralhas","Aviões, especiarias, moedas, rios","Criptomoedas, pedras, escambo, sal"], c:0, e:"As formas de pagamento mudaram com o tempo: trocas diretas, metais, moedas, papel-moeda e meios digitais."},
+      {t:"Formas de pagamento", q:"Qual foi uma vantagem das moedas em relação ao escambo?", a:["Facilitaram comparar valores e realizar trocas","Impediram o comércio","Só podiam ser usadas em navios","Eram alimentos conservados"], c:0, e:"As moedas criaram uma referência de valor mais prática do que depender de uma troca direta."},
+      {t:"Formas de pagamento", q:"PIX, cartão e transferência são exemplos de:", a:["Dinheiro eletrônico ou formas modernas de pagamento","Escambo antigo","Especiarias orientais","Meios ferroviários"], c:0, e:"Essas são formas modernas de pagamento, geralmente feitas por meios eletrônicos."},
+      {t:"Formas de pagamento", q:"Criptomoedas são melhor descritas como:", a:["Moedas digitais","Cédulas de papel antigas","Carroças comerciais","Produtos da Mesopotâmia"], c:0, e:"Criptomoedas são formas digitais de valor, como o Bitcoin."},
+      {t:"Formas de pagamento", q:"Por que cédulas de dinheiro facilitaram o comércio?", a:["São mais leves para transportar do que muitos metais","Estragam mais rápido que frutas","Só funcionam em aldeias","Substituíram todos os navios"], c:0, e:"Cédulas tornam pagamentos maiores mais fáceis de carregar do que grandes quantidades de metal."},
+
+      {t:"Transportes", q:"Qual meio de transporte é hidroviário?", a:["Navio","Trem","Avião","Cavalo"], c:0, e:"Hidroviário é transporte pela água, como barcos e navios."},
+      {t:"Transportes", q:"Qual meio de transporte depende de trilhos?", a:["Trem","Barco","Avião","Camelo"], c:0, e:"Trens circulam em ferrovias, que usam trilhos."},
+      {t:"Transportes", q:"Para transportar grandes quantidades entre continentes, qual opção foi muito importante na história?", a:["Navios","Carrinhos de mão","Bicicletas","Patins"], c:0, e:"Navios permitiram transportar muitas mercadorias por mares e oceanos."},
+      {t:"Transportes", q:"Qual é uma vantagem do transporte aéreo?", a:["É muito rápido para longas distâncias","Carrega sempre mais que navios","Não precisa de combustível","Só anda em rios"], c:0, e:"Aviões são rápidos, embora possam ter custo alto e menor capacidade que navios em muitos casos."},
+      {t:"Transportes", q:"Carroças e cavalos são exemplos de transporte:", a:["Terrestre","Hidroviário","Aéreo","Digital"], c:0, e:"Eles se deslocam por terra, por isso são terrestres."},
+
+      {t:"Mesopotâmia", q:"A Mesopotâmia ficava entre quais rios?", a:["Tigre e Eufrates","Nilo e Amazonas","Paraná e Tietê","Sena e Tâmisa"], c:0, e:"Mesopotâmia significa região entre rios, especialmente Tigre e Eufrates."},
+      {t:"Mesopotâmia", q:"Por que os rios eram importantes para o comércio na Mesopotâmia?", a:["Facilitavam transporte de pessoas e mercadorias","Impediam qualquer troca","Criavam cartões de crédito","Produziam especiarias automaticamente"], c:0, e:"Rios serviam como caminhos naturais para transporte e também ajudavam na agricultura."},
+      {t:"Mesopotâmia", q:"Povos da Mesopotâmia ficaram conhecidos por:", a:["Formar cidades e comerciar com outros povos","Inventar aviões comerciais","Usar somente criptomoedas","Nunca fazer trocas"], c:0, e:"Na Mesopotâmia surgiram cidades importantes, agricultura organizada e comércio."},
+      {t:"Mesopotâmia", q:"Qual situação combina com o comércio mesopotâmico?", a:["Barcos transportando produtos pelos rios","Aviões levando sal para Marte","Cartões sendo usados em mercados antigos","Trens cruzando desertos antigos"], c:0, e:"Barcos nos rios eram muito úteis para transportar mercadorias."},
+
+      {t:"Especiarias", q:"O que eram especiarias?", a:["Produtos como canela, cravo, pimenta e noz-moscada","Tipos de muralha","Moedas de prata","Mapas de navegação"], c:0, e:"Especiarias eram produtos aromáticos usados em alimentos, conservação e remédios."},
+      {t:"Especiarias", q:"Por que as especiarias eram tão disputadas na Europa?", a:["Eram valiosas, vinham de longe e tinham muitos usos","Eram encontradas em qualquer quintal europeu","Não tinham utilidade","Eram usadas apenas como brinquedos"], c:0, e:"Como vinham principalmente do Oriente e tinham grande procura, eram caras e disputadas."},
+      {t:"Especiarias", q:"Qual opção traz apenas especiarias?", a:["Canela, cravo e pimenta","Ouro, prata e cobre","Trem, navio e avião","Cédula, cartão e PIX"], c:0, e:"Canela, cravo e pimenta são especiarias."},
+      {t:"Especiarias", q:"Um uso importante das especiarias no passado era:", a:["Dar sabor, ajudar na conservação e uso medicinal","Construir trilhos","Fazer muralhas","Pagar boleto"], c:0, e:"Muitas especiarias eram usadas na alimentação, conservação e em remédios."},
+
+      {t:"Grandes Navegações", q:"Um objetivo das Grandes Navegações foi:", a:["Encontrar novas rotas comerciais","Acabar com todas as cidades","Criar a internet","Proibir especiarias"], c:0, e:"Europeus buscavam novas rotas para comércio, especialmente para chegar às Índias e obter produtos valiosos."},
+      {t:"Grandes Navegações", q:"Cristóvão Colombo chegou à América em:", a:["1492","1500","2020","476"], c:0, e:"Colombo chegou à América em 1492, embora achasse que havia alcançado uma rota para as Índias."},
+      {t:"Grandes Navegações", q:"Pedro Álvares Cabral chegou ao Brasil em:", a:["1500","1492","1498","1808"], c:0, e:"A chegada de Cabral ao Brasil ocorreu em 1500."},
+      {t:"Grandes Navegações", q:"Vasco da Gama ficou conhecido por:", a:["Chegar às Índias contornando a África","Criar o PIX","Fundar a Mesopotâmia","Construir a Rota da Seda sozinho"], c:0, e:"Vasco da Gama chegou às Índias em 1498, abrindo importante rota marítima para Portugal."},
+      {t:"Grandes Navegações", q:"Qual instrumento ajudava navegadores a se orientar?", a:["Bússola","Cartão de crédito","Televisão","Geladeira"], c:0, e:"A bússola ajudava a indicar direções, muito importante para navegar."},
+
+      {t:"Américas coloniais", q:"Nas Américas coloniais, portugueses trocavam objetos com indígenas principalmente por meio de:", a:["Escambo","PIX","Cartão","Criptomoeda"], c:0, e:"O escambo foi muito usado nas primeiras trocas entre portugueses e povos indígenas."},
+      {t:"Américas coloniais", q:"Qual objeto poderia aparecer nas trocas entre portugueses e indígenas?", a:["Espelhos e ferramentas","Aviões e trens","Celulares e notebooks","Cartões e boletos"], c:0, e:"Espelhos, machados, tecidos e outros objetos eram usados em trocas."},
+      {t:"Américas coloniais", q:"Por que um espelho podia chamar atenção em uma troca colonial?", a:["Era um objeto diferente e curioso para muitos indígenas","Era uma especiaria comestível","Era uma moeda obrigatória","Era um meio de transporte"], c:0, e:"Alguns objetos europeus eram novidades e podiam ser valorizados pela curiosidade ou utilidade."},
+      {t:"Américas coloniais", q:"Qual alternativa mostra uma troca por escambo?", a:["Machado por alimentos","Dinheiro por celular","Cartão por roupa","PIX por brinquedo"], c:0, e:"Quando há troca direta de produtos sem dinheiro, temos escambo."},
+
+      {t:"Rota da Seda", q:"A Rota da Seda ligava principalmente:", a:["Ásia, Europa e África","Brasil e Lua","Mesopotâmia e Antártida","Apenas duas aldeias brasileiras"], c:0, e:"A Rota da Seda conectava regiões da Ásia, Europa e África, permitindo trocas comerciais e culturais."},
+      {t:"Rota da Seda", q:"Que produtos circulavam pela Rota da Seda?", a:["Seda, especiarias, porcelanas e pedras preciosas","Somente cartões","Apenas milho","Só aviões"], c:0, e:"A rota ficou famosa por produtos valiosos como seda, especiarias e porcelanas."},
+      {t:"Rota da Seda", q:"Além de produtos, a Rota da Seda também ajudava a espalhar:", a:["Ideias, culturas e conhecimentos","Apenas moedas digitais","Somente muralhas","Nada além de sal"], c:0, e:"Rotas comerciais também aproximavam povos e espalhavam ideias, costumes e conhecimentos."},
+      {t:"Rota da Seda", q:"Por que uma rota comercial é importante?", a:["Porque conecta lugares e facilita trocas","Porque impede viagens","Porque acaba com mercados","Porque só serve para guerras"], c:0, e:"Rotas ligam regiões e ajudam mercadorias, pessoas e ideias a circular."},
+
+      {t:"Revisão geral", q:"Qual frase resume bem a importância do comércio?", a:["O comércio aproximou povos, produtos e culturas","O comércio só serviu para guardar alimentos","O comércio começou com aviões","O comércio nunca mudou"], c:0, e:"O comércio mudou muito ao longo da história e ajudou a conectar pessoas e lugares."},
+      {t:"Revisão geral", q:"Qual combinação está correta?", a:["Escambo: troca sem dinheiro","Salário: pagamento com cartão","Especiaria: tipo de trem","Hidroviário: transporte aéreo"], c:0, e:"Escambo é troca direta sem dinheiro."},
+      {t:"Revisão geral", q:"Se uma criança disser: 'Hoje o comércio é igual ao de antigamente', o que você responderia?", a:["Não. As formas de pagamento e transporte mudaram muito","Sim. Nada mudou","Sim. Só existe escambo","Não existe mais comércio"], c:0, e:"O comércio continuou importante, mas mudou com moedas, bancos, cartões, internet, aviões, navios modernos e outros avanços."},
+      {t:"Revisão geral", q:"Qual item NÃO é meio de transporte?", a:["Canela","Trem","Navio","Avião"], c:0, e:"Canela é uma especiaria, não um meio de transporte."},
+      {t:"Revisão geral", q:"Qual item NÃO é forma de pagamento?", a:["Carroça","Moeda","Cartão","Dinheiro eletrônico"], c:0, e:"Carroça é meio de transporte terrestre, não forma de pagamento."}
+    ];
+
+    let questions = [];
+    let current = 0;
+    let coins = 0;
+    let mistakes = [];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startQuiz() {
+      questions = shuffle(bank).slice(0, 30);
+      current = 0;
+      coins = 0;
+      mistakes = [];
+      document.getElementById("start").classList.add("hidden");
+      document.getElementById("end").classList.add("hidden");
+      document.getElementById("review").classList.add("hidden");
+      document.getElementById("quiz").classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const item = questions[current];
+      document.getElementById("counter").textContent = `Pergunta ${current + 1} de ${questions.length}`;
+      document.getElementById("score").textContent = `Moedas: ${coins} 🪙`;
+      document.getElementById("progress").style.width = `${(current / questions.length) * 100}%`;
+      document.getElementById("theme").textContent = item.t;
+      document.getElementById("question").textContent = item.q;
+      document.getElementById("feedback").classList.add("hidden");
+      document.getElementById("nextBtn").classList.add("hidden");
+
+      const answersBox = document.getElementById("answers");
+      answersBox.innerHTML = "";
+
+      const choices = shuffle(item.a.map((text, index) => ({ text, correct: index === item.c })));
+      choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "answer";
+        btn.textContent = choice.text;
+        btn.onclick = () => answer(btn, choice.correct, item, choices);
+        answersBox.appendChild(btn);
+      });
+    }
+
+    function answer(button, isCorrect, item) {
+      const all = document.querySelectorAll(".answer");
+      all.forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        coins++;
+        button.classList.add("correct");
+        showFeedback(`✅ <strong>Muito bem!</strong> Você ganhou uma moeda histórica!<br>${item.e}`);
+      } else {
+        button.classList.add("wrong");
+        all.forEach(b => {
+          if (b.textContent === item.a[item.c]) b.classList.add("correct");
+        });
+        mistakes.push(item);
+        showFeedback(`💡 <strong>Quase!</strong> A resposta correta era: <strong>${item.a[item.c]}</strong>.<br>${item.e}`);
+      }
+
+      document.getElementById("score").textContent = `Moedas: ${coins} 🪙`;
+      document.getElementById("nextBtn").classList.remove("hidden");
+    }
+
+    function showFeedback(html) {
+      const fb = document.getElementById("feedback");
+      fb.innerHTML = html;
+      fb.classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current >= questions.length) finishQuiz();
+      else renderQuestion();
+    }
+
+    function finishQuiz() {
+      document.getElementById("quiz").classList.add("hidden");
+      document.getElementById("end").classList.remove("hidden");
+      document.getElementById("progress").style.width = "100%";
+      const pct = Math.round((coins / questions.length) * 100);
+      let medal = "🥉";
+      let msg = "Bom trabalho! Continue treinando e você vai dominar essa viagem pela História.";
+      if (pct >= 85) { medal = "🏆🌟"; msg = "Excelente! Você é um(a) grande comerciante do tempo!"; }
+      else if (pct >= 65) { medal = "🥈⭐"; msg = "Muito bom! Você entendeu bastante coisa e pode revisar alguns detalhes."; }
+      document.getElementById("medal").textContent = medal;
+      document.getElementById("finalText").innerHTML = `Você fez <strong>${coins}</strong> de <strong>${questions.length}</strong> moedas. Resultado: <strong>${pct}%</strong>.<br>${msg}`;
+    }
+
+    function showReview() {
+      const review = document.getElementById("review");
+      review.innerHTML = "";
+      if (mistakes.length === 0) {
+        review.innerHTML = `<div class="reviewItem">🎉 Você não errou nenhuma! Pode jogar de novo para receber novas perguntas.</div>`;
+      } else {
+        mistakes.forEach((m, i) => {
+          const div = document.createElement("div");
+          div.className = "reviewItem";
+          div.innerHTML = `<strong>${i + 1}. ${m.q}</strong><br>Resposta: <strong>${m.a[m.c]}</strong><br>${m.e}`;
+          review.appendChild(div);
+        });
+      }
+      review.classList.toggle("hidden");
+    }
+  </script>
+</body>
+</html>
