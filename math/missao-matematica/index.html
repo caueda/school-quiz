@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6546d7">
+  <meta name="description" content="Simulado divertido de matemática para o 4º ano: contas, frações, decimais e dinheiro.">
+  <title>Missão Matemática • Simulado do 4º ano</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="quiz.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div class="brand"><span class="brand-icon" aria-hidden="true">✦</span><span>Clube dos Números</span></div>
+      <span class="grade">4º ano · 9 anos</span>
+    </header>
+
+    <section id="welcome" class="welcome card" aria-labelledby="welcome-title">
+      <div class="hero-art" aria-hidden="true"><span class="orbit orbit-a">½</span><span class="orbit orbit-b">?</span><span class="orbit orbit-c">R$</span><span class="hero-star">★</span></div>
+      <p class="eyebrow">SUA AVENTURA COMEÇA AQUI</p>
+      <h1 id="welcome-title">Missão<br><em>Matemática!</em></h1>
+      <p class="intro">Um simulado cheio de descobertas. Cada partida traz desafios diferentes para você praticar e aprender no seu ritmo.</p>
+      <div class="stat-row"><div><strong>12</strong><span>desafios</span></div><div><strong>9</strong><span>assuntos</span></div><div><strong>∞</strong><span>novas partidas</span></div></div>
+      <button id="start" class="primary">Começar a missão <span aria-hidden="true">→</span></button>
+      <p class="gentle">Sem relógio e sem pressão. Você pode pedir uma dica quando quiser. 💜</p>
+      <div class="topics" aria-label="Assuntos do simulado"><span>Igualdades</span><span>Operações</span><span>Balanças</span><span>Frações</span><span>Reta numérica</span><span>Decimais</span><span>Dinheiro</span></div>
+    </section>
+
+    <section id="game" class="game hidden" aria-labelledby="question-heading">
+      <div class="status card"><div class="status-line"><span id="count">Desafio 1 de 12</span><span id="score">⭐ 0 pontos</span></div><div id="progress" class="progress" role="progressbar" aria-label="Progresso do simulado" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div id="progress-fill"></div></div></div>
+      <article class="challenge card">
+        <span id="topic" class="topic"></span>
+        <h2 id="question-heading"></h2>
+        <div id="visual" class="visual"></div>
+        <div id="options" class="options" role="group" aria-label="Escolha uma resposta"></div>
+        <button id="hint-button" class="hint-button" type="button">💡 Quero uma dica</button>
+        <div id="hint" class="hint hidden" role="note"></div>
+        <div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div>
+        <button id="next" class="primary hidden" type="button">Próximo desafio <span aria-hidden="true">→</span></button>
+      </article>
+      <p class="game-note">Errar faz parte de aprender. Leia a explicação e siga em frente! ✨</p>
+    </section>
+
+    <section id="finish" class="finish card hidden" aria-labelledby="finish-title">
+      <div class="finish-medal" aria-hidden="true">🏅</div>
+      <p class="eyebrow">MISSÃO CONCLUÍDA</p>
+      <h2 id="finish-title">Você chegou até o fim!</h2>
+      <p id="finish-message" class="intro"></p>
+      <div class="final-score"><strong id="final-points"></strong><span>respostas certas em 12</span></div>
+      <h3>Seu mapa de descobertas</h3>
+      <div id="topic-results" class="topic-results"></div>
+      <button id="restart" class="primary" type="button">Jogar outra vez <span aria-hidden="true">↻</span></button>
+      <p class="gentle">A próxima partida terá novas perguntas para praticar.</p>
+    </section>
+    <footer>Feito para estudar com curiosidade e coragem. 🌈</footer>
+  </main>
+</body>
+</html>
